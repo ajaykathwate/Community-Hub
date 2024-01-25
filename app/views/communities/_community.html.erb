@@ -1,0 +1,11 @@
+<% if @single_community %>
+    <% if @single_community.id == community.id%>
+        <div class="border-x-4 rounded-md border-green-500">
+            <%= link_to(image_tag(community.community_profile, alt: community.name, class:"bg-fit  w-12 h-12 rounded-full cursor-pointer"), community) %>
+        </div>
+    <% else %>
+        <%= link_to(image_tag(community.community_profile, alt: community.name, class:"bg-fit  w-12 h-12   border-none rounded-full cursor-pointer"), community) %>
+    <% end %>
+<% else %>
+    <%= link_to(image_tag(community.community_profile, alt: community.name, class:"bg-fit  w-12 h-12   border-none rounded-full cursor-pointer"), community) %>
+<% end %>

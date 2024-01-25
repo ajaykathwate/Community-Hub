@@ -1,0 +1,25 @@
+<div class="w-fit max-w-fit flex flex-col justify-start gap-4 p-2">
+    <div class="flex flex-row items-center justify-between">
+        <p class="flex-1 w-full text-center text-black text-xl font-semibold">Join Community</p>
+        <button data-action="dialog#close" class=" cursor-pointer">
+            <img src="https://cdn-icons-png.flaticon.com/128/11823/11823292.png" class="w-6 h-6"/>
+        </button>
+    </div>
+
+    <div class="w-full">
+
+        <%= form_tag communities_path, method: :get, data: { turbo_frame: "", turbo_action: "advance", controller: "search", action: "input->search#submit" } do |f| %>
+            <div class="relative">
+                <%= text_field_tag "query", nil, placeholder: "Search Community ...", class: "w-full px-4 py-2 border-none rounded-full bg-[#cfe5fb]" %>
+            </div>
+        <% end %>
+        
+    </div>
+
+    <div class="w-fit h-fit max-w-fit max-h-[27em] flex flex-1 flex-start flex-row gap-2 flex-wrap overflow-y-auto custom-scrollbar">
+
+                <%= render "join_communities/community_search", communities: @communities %>
+        
+    </div>
+</div>
+

@@ -1,0 +1,2 @@
+module JoinComminitiesHelper
+end

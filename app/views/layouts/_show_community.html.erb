@@ -1,0 +1,99 @@
+<!-- Selected community info -->
+<section class="flex flex-1 flex-col justify-between bg-white my-1 mx-2 rounded-md py-2 px-2">
+
+    <!-- TODO: Chatroom section and messaging functionality -->
+  
+    <div class=" flex flex-row items-center justify-start gap-3 mx-2">
+        <%= image_tag(community.community_profile, class: " w-10 h-10 rounded-full") %>
+        <div class="flex flex-1 flex-col items-start justify-items-start">
+            <div class="flex flex-row">
+                <p class="text-lg font-medium text-black"><%= community.name%></p>
+                <!-- TODO: Create new community with modal -->
+                <% if community_admin.id == current_user.id %>
+                    <%= link_to edit_community_path(community), data: {turbo_frame: :modal, action: "click -> dialog#open"}, class: "block" do %>
+                        <div class="w-6 h-6 mx-2 border-none cursor-pointer flex justify-center items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 hover:w-5 hover:h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                            </svg>
+                        </div>
+                    <% end %>
+                <% end %>
+            </div>
+            <p class="text-sm text-[#a6a8aa]"><%= community.users.count%> members</p>
+        </div>
+        <div class=" px-1"> 
+            <% if @community_admin.id != current_user.id %>
+                <%= link_to leave_community_path(community), class: "block" do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-500 cursor-pointer transform hover:scale-110 transition duration-500 ease-in-out ">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                    </svg>
+                <% end %>
+            <% else %>
+                <%= link_to delete_community_path(community), class: "block" do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-500 cursor-pointer transform hover:scale-110 transition duration-500 ease-in-out ">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                    </svg>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+    <div class="flex flex-1 flex-col bg-[#f4f6fa] rounded-md my-2 max-h-[31.5em] overflow-y-auto custom-scrollbar">
+
+        <!-- chatroom : render a _message_form partial here -->
+        <%= turbo_stream_from @single_chatroom %>
+        <div id="messages">
+            <%= render @messages%>
+        </div>
+        
+    </div>
+    <%= render 'layouts/new_message_form' %>
+    
+
+</section>
+    
+<!-- Community members list and Join requests -->
+<!-- TODO: list the community members and community join request section(visible only if current_user is a admin of the community) -->
+<section class="pr-2 py-1 rounded-lg bg-[#dee4f6] flex-col flex-wrap min-w-56 text-orange-950 text-md max-h-screen max-w-fit w-fit bg-gray-800-50 hidden lg:block md:block gap-2">
+
+    <div class="flex flex-1 flex-col bg-white py-1 px-4 rounded-md">
+        <div class="flex flex-row items-center justify-start gap-2">
+            <p class="text-start text-sm font-semibold text-[#a6a8aa] py-2">Admin </p>
+            <img src="https://cdn-icons-png.flaticon.com/128/657/657694.png" alt="admin", class="w-3.5 h-3.5 text-[#a6a8aa]">
+        </div>
+        <div class="flex flex-row items-center justify-start gap-3 py-1 px-2">
+            <%= image_tag(community_admin.profile_image, class: "w-8 h-8 rounded-full") %>
+            <p class="text-md text-[#7a7a7a]"><%= community_admin.username%></p>
+        </div>
+        <p class="text-start text-sm font-semibold text-[#a6a8aa] py-2">Community Members - <%= community.users.count%> </p>
+        <% community.users.each do |user|%>
+            <div class="flex flex-row items-center justify-start gap-3 py-1 px-2">
+                <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
+                <p class="text-md text-[#7a7a7a]"><%= user.username%></p>
+            </div>
+        <% end %>
+    </div>
+    <hr class="w-full h-2 mx-auto bg-[#000] border-0 rounded  dark:bg-gray-200">
+    <div class="flex flex-col bg-white py-1 px-2 rounded-md">
+        <div class="flex flex-row items-center justify-start gap-2">
+            <p class="text-start text-sm font-semibold text-[#a6a8aa] py-2">Requests </p>
+            <img src="https://cdn-icons-png.flaticon.com/128/1592/1592490.png" alt="admin", class="w-4 h-4 text-[#a6a8aa]">
+        </div>
+
+        <% if pending_requests.count <= 0 %>
+            <p class="text-center text-sm font-semibold text-[#a6a8aa] py-2">No Requests Pending...</p>
+        <% end %>
+
+        <% pending_requests.each do |p| %>
+            <div class="flex flex-row items-center justify-start gap-3 py-1 px-2">
+                <%= image_tag(community_admin.profile_image, class: "w-8 h-8 rounded-full") %>
+                <p class="text-md text-[#7a7a7a] flex-1"><%= community_admin.username%></p>
+                <%= link_to accept_request_to_join_community_path(p), class: "block" do %>
+                    <div class="flex items-center justify-center w-10 h-8 bg-[#cfe5fb] rounded-md cursor-pointer hover:w-11 hover:h-8">
+                        <img src="https://cdn-icons-png.flaticon.com/128/4505/4505201.png" alt="accept-request" class="w-6 h-6 text-[#a6a8aa]">
+                    </div>
+                <% end %>
+            </div>
+        <% end %>
+    </div>
+
+</section>

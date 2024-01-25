@@ -1,0 +1,72 @@
+<%= form_with(model: @community, remote: true, data: { turbo_frame: "communities"}) do |form|%>
+
+    <!-- validation errors here -->
+    <% if @community.errors.any? %>
+        <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+          <h2><%= pluralize(@community.errors.count, "error") %> prohibited this community from being saved:</h2>
+          <ul>
+            <% @community.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <div class="flex flex-col justify-start gap-2">
+        
+        <div class="w-full flex flex-col gap-2">
+            <%= form.text_field :name, class: "w-full px-4 py-2 text-sm border-none rounded-md bg-[#f4f6fa] text-[#000]" , placeholder: "Name" %>
+            <%= form.text_area :about, class: "w-full px-4 py-2 text-sm border-none rounded-md bg-[#f4f6fa] text-[#000] resize-none" , placeholder: "About..." %>
+            <div class="flex flex-col">
+                <div class="flex items-center justify-start">
+                    <p class="text-start text-sm font-semibold text-[#a6a8aa] py-1">Select Topic</p>
+                </div>
+                <div class="flex- flex-row">
+                    <div class=" text-black flex justify-start gap-2">
+                        <label class="inline-flex items-center">
+                          <%= form.radio_button :topic, 'E-learning', class: 'form-radio h-4 w-4 text-indigo-600', data: { target: 'community-topic-input' } %>
+                          <span class="ml-1 text-sm text-gray-950">E-Learning</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                          <%= form.radio_button :topic, 'Sports', class: 'form-radio h-4 w-4 text-indigo-600', data: { target: 'community-topic-input' } %>
+                          <span class="ml-1 text-sm text-gray-950">Sports</span>
+                        </label>
+                        <%= form.text_field :custom_topic, class: 'form-input flex-1 flex w-full px-4 py-2 text-sm border-none rounded-md bg-[#f4f6fa] text-[#000]', id: 'community-topic-input',  placeholder: "Custom Topic" %>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="w-full gap-2 flex flex-row justify-start items-center text-sm">
+                <label class="text-start text-sm font-semibold text-[#a6a8aa] py-1">Community Type</label>
+                <div class=" text-gray-950 flex justify-start gap-2">
+                  <label class="inline-flex items-center">
+                    <%= form.radio_button :isPrivate, false, id: "isPrivate" , class: "form-radio h-4 w-4 text-indigo-600" %>
+                    <span class="ml-1 text-sm text-gray-950">Public</span>
+                  </label>
+                  <label class="inline-flex items-center">
+                    <%= form.radio_button :isPrivate, true ,id: "isPrivate" , class: "form-radio h-4 w-4 text-indigo-600" %>
+                    <span class="ml-1 text-sm text-gray-950">Private</span>
+                  </label>
+                </div>
+            </div>
+            <div class="w-full my-2 text-sm flex flex-row items-center gap-2">
+                <p class="text-start text-sm font-semibold text-[#a6a8aa] py-1">Profile</p>
+                <%= form.file_field :community_profile, class: "block w-full rounded-md  focus:outline-none focus:border-blue-500" %>
+            </div>
+            <div class="w-full rounded-full text-md font-medium bg-[#0775ff] py-1 justify-center items-center flex cursor-pointer">
+                <%= form.submit "Submit", data: { disable_with: false }, class:"cursor-pointer"%>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+    const topicRadio = document.querySelector('[data-target="community-topic-input"]');
+    const topicInput = document.getElementById('community-topic-input');
+
+    topicRadio.addEventListener('change', () => {
+      topicInput.disabled = topicRadio.value !== '';
+    });
+  </script>
+
+<% end %>

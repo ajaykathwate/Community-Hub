@@ -1,0 +1,59 @@
+<!--
+<% if current_user %>
+  <h1>Welcome, <%= current_user.name %></h1>
+<% else %>
+  <h1>This is the index page</h1>
+  <%= link_to 'Login', new_user_sessions_path %><br>
+<% end %>
+<%= link_to 'Secret page', '/homepages/secret' %>
+-->
+
+<section class="bg-orange-100 w-full min-h-screen  px-20 pt-5 flex justify-between items-center flex-col">
+    <nav class="container flex flex-row w-full h-fit bg-orange-50 border-none rounded-lg shadow-md items-center justify-between">
+      <%= link_to root_path, class: "block" do %>
+        <div class="pl-5 py-3 items-center flex text-2xl text-orange-950 font-mono">
+          Community Hub
+        </div>
+      <% end %>
+      <div class="flex flex-row gap-7 pr-5 py-3 items-center">
+        <p class="cursor-pointer text-orange-950 font-sans">
+          <% if current_user %>
+            <h1><%= current_user.name %></h1>
+          <% else %>
+            <%= link_to 'Login', new_user_sessions_path %><br>
+          <% end %> 
+        </p>
+        <% if current_user %>
+          <div class="py-2 px-4 bg-orange-500 cursor-pointer border-none rounded text-white">
+            <%= link_to 'Logout', logout_path, data: { confirm: 'Are you sure?', turbo_method: :delete } %>
+          </div>
+        <% else %>
+          <div class="py-2 px-4 bg-orange-500 cursor-pointer border-none rounded text-white">
+            <%= link_to 'Get Started', "/users/new" %>
+          </div>
+        <% end %>
+      </div>
+    </nav>
+
+    <div class="w-fit  p-40 flex flex-col justify-center items-center">
+      <p class="text-center text-6xl pb-3 font-serif text-orange-950">
+        Join communities, learn, and discuss with others who share your interests.
+      </p>
+      <p class="text-center text-xl px-20 pb-5 font-serif text-orange-950">
+        Join E-Learning Community, Sports Community or Create your own community and and foster discussions with like-minded individuals.
+      </p>
+
+      <% if current_user %>
+        <div class="py-2 px-4 bg-orange-500 cursor-pointer border-none rounded text-white">
+          <%= link_to 'Get Started', "/app"%>
+        </div>
+      <% else %>
+        <div class="py-2 px-4 bg-orange-500 cursor-pointer border-none rounded text-white">
+          <%= link_to 'Get Started', "/users/new" %>
+        </div>
+      <% end %>
+
+
+    </div>
+
+</section>

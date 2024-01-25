@@ -1,0 +1,49 @@
+<%= form_with model: @user, url: user_sessions_path do |form|%>
+
+    <section class="bg-orange-100 w-screen h-screen px-8 flex justify-center items-center">
+    <% if @user.errors.any? %>
+        <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+          <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+          <ul>
+            <% @user.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    
+        <div class=" bg-white w-fit h-fit border-none rounded-md p-8  gap-5 flex flex-col justify-center">  
+
+            <div class="flex flex-col items-center justify-center h-full">
+                <p class="text-2xl font-semibold mb-2">Welcome</p>
+                <p class="text-lg text-gray-500 mb-4">SignIn to proceed</p>
+            </div>
+     
+           <div class="relative">
+                <%= form.label :email, class: "absolute text-md text-gray-500 duration-300 transform      -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1" %>
+                <%= form.text_field :email, class: "block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
+            </div>
+           <div class="relative">
+                <%= form.label :password, class: "absolute text-md text-gray-500 duration-300 transform   -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1" %>
+                <%= form.password_field :password, class: "block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" %>
+            </div> 
+            <div class="relative">
+                <p class="text-sm">
+                    <span class="italic text-orange-950 hover:underline cursor-pointer">Forgot password?</span>
+                </p>
+            </div>
+            <div class="relative">
+                <%= form.submit "Continue", class: "w-full bg-orange-500 border-none rounded py-1 text-lg cursor-pointer" %>
+            </div>
+            <div class="relative">
+                <p class="text-sm">
+                    Don't have an account? 
+                    <span class="italic text-orange-500 hover:underline cursor-pointer">
+                        <%= link_to 'Register', new_user_path %>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </section>
+<% end %>

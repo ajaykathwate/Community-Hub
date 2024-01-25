@@ -1,0 +1,25 @@
+<div data-controller="previews">
+    <div class="relative">
+        <!--
+        <div class="w-fit h-fit flex items-center justify-center">
+            <% if message.post_image.attached? %>
+                <%= image_tag message.post_image, data: { previews_target: "preview" }, class: "w-40 h-20" %>
+            <% else %>
+                <%= image_tag "", data: { previews_target: "preview" }, class: "w-40 h-20" %>
+            <% end %>
+        </div>
+        -->
+
+        <label for="post_image" class="w-8 h-8 border-none rounded-full text-white cursor-pointer flex items-center justify-center bg-[#0083ff]">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 hover:w-6 hover:h-6">
+            <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z" clip-rule="evenodd" />
+          </svg>
+        </label>
+        <%= form.file_field :post_image,
+            class: "hidden", 
+            id: "post_image", 
+            accept: "image/*", 
+            direct_upload: true, 
+            data: { previews_target: "input", action: "change->previews#preview" } %>
+    </div>
+</div>
