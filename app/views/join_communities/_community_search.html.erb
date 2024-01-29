@@ -1,14 +1,15 @@
 <% @communities.each do |community| %>
-    <div class="w-full rounded-md flex flex-row items-center justify-between my-2 px-2">
-        <div class=" flex flex-row items-center justify-between gap-3">
-            <p class="text-md font-medium text-black"><%= community.name %> </p>
+    <div class="w-full rounded-md flex flex-row items-center justify-between gap-2 my-2 px-2">
+        <%= image_tag community.community_profile, class:"w-8 h-8 rounded-full"%>
+        <div class=" flex flex-1 flex-row items-center justify-between gap-3">
+            <p class="text-md text-wrap font-medium text-black"><%= community.name %> </p>
         </div>
-        <div class="rounded-md px-5 py-1 w-fit h-fit bg-[#cfe5fb] text-black">
+        <div class="">
             <!-- checking if a community private, if the community is private then add Request button or add Join button -->
             <% if community.isPrivate %>
-                <%= link_to 'Request', request_to_join_community_path(community),data: { controller: "dialog", action: "dialog#close" }, method: :get %>
+                <%= link_to 'Request', request_to_join_community_path(community),data: { controller: "dialog", action: "dialog#close" }, method: :get, class:"bg-orange-500 rounded-md px-5 py-1 w-fit h-fit text-white"%>
             <% else %>
-                <%= link_to 'Join', join_community_path(community),data: { controller: "dialog", action: "dialog#close" }, method: :get %>
+                <%= link_to 'Join', join_community_path(community),data: { controller: "dialog", action: "dialog#close" }, method: :get, class:"bg-yellow-500 rounded-md px-5 py-1 w-fit h-fit text-white" %>
             <% end %>
         </div>
     </div>

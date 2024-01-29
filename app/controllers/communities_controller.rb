@@ -9,6 +9,13 @@ class CommunitiesController < ApplicationController
 
     @single_chatroom = @single_community.chat_room
 
+    if @single_community.topic == 'E-Learning'
+      @e_learning_chat_room = @single_community.e_learning_chat_room
+      @video_post = VideoPost.new
+      @video_posts = @e_learning_chat_room.video_posts.order(created_at: :asc)
+    end
+
+
     @current_user = current_user
 
     @message = Message.new
@@ -51,15 +58,21 @@ class CommunitiesController < ApplicationController
     # setting admin_id using current_user.id
     @community.admin_id = current_user.id
 
-    # NEW ADDED
     # whenever a new community is created then a new chatroom is also created
+    # If a user opt for E-Learning or sports community then that community is also created along with main ChatRoom
 
     # save community and chatroom both
     if @community.save
       current_user.communities << @community
+
+      # ChatRoom is created
       @chat_room = ChatRoom.create(community: @community)
-      # redirect_to create_chat_room_chat_rooms_path(@community)
-      # render template: "chat_rooms_controller/create_chat_room"
+      # E-Learning or Sports chatroom is created
+      if @community.topic == 'E-Learning'
+        ELearningChatRoom.create(community: @community)
+      elsif @community.topic == 'Sports'
+        SportsChatRoom.create(community: @community)
+      end
       redirect_to app_path
     else
       render :new

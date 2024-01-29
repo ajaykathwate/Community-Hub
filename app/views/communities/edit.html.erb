@@ -1,5 +1,5 @@
 <%= render 'layouts/turbo_dialog' do %>
-    <div action="turbo:submit-end->turbo-modal#submitEnd" class="fixed z-1 p-6 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-auto bg-white w-fit h-fit rounded-2xl shadow-xl">
+    <div action="turbo:submit-end->turbo-modal#submitEnd" class="fixed z-1 p-6 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-auto bg-white w-fit h-fit rounded-2xl shadow-xl backdrop:bg-gray-200 backdrop:bg-opacity-60">
         <div class="my-2 flex flex-row items-center justify-between gap-5">
             <p class="flex-1 w-full text-start text-black text-xl font-semibold">Edit Community </p>
             <button data-action="dialog#close" class=" cursor-pointer">

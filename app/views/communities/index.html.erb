@@ -4,8 +4,145 @@
     <section class="bg-white rounded-lg flex flex-col items-center justify-between flex-wrap max-h-screen h-fit max-w-fit min-w-10 w-fit mx-2 b-1  px-2 shadow-lg">
 
         <!-- profile icon with count of communities -->
-        <div class="">
-            <%= image_tag(current_user.profile_image, class:"w-11 h-11 m-2 border-none rounded-xl cursor-pointer") %>
+        <div class="relative" data-controller="tooltip" data-action="mouseenter->tooltip#showTooltip">
+            <!-- show profile image if attached or Show First Letters of name as Profile-->
+            <% if current_user.profile_image.attached?%>
+                <div class="w-11 h-11 m-2 border-none rounded-xl flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                    <%= image_tag(current_user.profile_image, class:"w-11 h-11 m-2 border-none rounded-xl cursor-pointer") %>
+                    <!-- tooltip -->
+                    <div class="min-w-fit max-h-[30em] overflow-y-auto hide-scrollbar flex-row items-center justify-center cursor-default  text-sm bg-slate-800 text-white p-2 gap-2 rounded-md hidden absolute left-14 top-0" style="white-space: nowrap;" id="tooltip" role="tooltip">
+                        <!-- tooltip text will appear here -->
+                        <div class="flex flex-col justify-center items-center h-fit gap-2">
+                            <div class="flex items-center justify-center">
+                                <% if current_user.profile_image.attached?%>
+                                    <%= image_tag(current_user.profile_image, class:"w-20 h-20 my-1 border-none rounded-full cursor-pointer") %>
+                                <% else %>
+                                    <% result = current_user.name.split.map(&:first).join.upcase %>
+                                    <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                                    <div class="w-20 h-20 my-1 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                                        <p class="text-black text-xl font-bold font-serif"><%= result %> </p>
+                                    </div>
+                                <% end %>
+                            </div>
+                            <!-- Name and username -->
+                            <div class="min-w-60 max-w-72 flex-wrap rounded-md flex flex-col flex-1 items-start justify-center bg-gray-700 px-4 py-1 ">
+                                <p class="text-start flex flex-1 text-lg font-semibold text-gray-200"><%= current_user.name %></p>
+                                <P class="text-start text-sm font-medium"><%= current_user.username %></P>
+                                <p class="text-start flex flex-1 text-sm font-medium text-gray-200"><%= current_user.email %></p>
+                                <hr class="w-full h-[0.5px] my-2 mx-auto border-0 rounded  dark:bg-gray-600">
+                                <p class="text-start flex flex-1 text-sm font-semibold text-gray-200">MEMBER SINCE</p>
+                                <p class="text-start flex flex-1 text-sm font-medium text-gray-200"><%= current_user.created_at.in_time_zone("Mumbai").strftime("%d %B, %Y") %></p>
+                                <hr class="w-full h-[0.5px] my-2 mx-auto border-0 rounded  dark:bg-gray-600">
+                                <p class="text-start flex flex-1 text-sm font-semibold text-gray-200">ABOUT</p>
+                                <p class="text-start text-md font-semibold text-[#fff] ">
+                                    <!-- about content -->
+                                    <span class="text-md text-wrap break-words"><%= current_user.about %></span>
+                                </p>
+                            </div>
+                            
+                            <!-- listing all communities a user is a admin of -->
+                            <% if current_user.communities.count > 0 %>
+                                <div class="min-w-60 max-w-72 flex-wrap rounded-md flex flex-col flex-1 items-start justify-center bg-gray-700 px-4 py-1 max-h-[20em] overflow-y-auto hide-scrollbar">
+                                    <p class="text-start flex flex-1 text-md font-semibold text-gray-200">ADMIN COMMUNITIES</p>
+                                    <hr class="w-full h-[0.5px] my-2 mx-auto border-0 rounded  dark:bg-gray-600">
+                                    <% current_user.communities.each do |community|%>
+                                        <% if community.admin_id == current_user.id %>
+                                            <div class="my-0.5 flex flex-row items-center justify-between gap-2">
+                                                <div class="flex items-center justify-center">
+                                                    <%= image_tag community.community_profile, class:"w-6 h-6 rounded-full bg-[#2a6fff]" %>
+                                                </div>
+                                                <div class="flex-1 justify-start">
+                                                    <%= community.name[0,18]%>...
+                                                </div>
+                                                <%= link_to community, class: "block" do %>
+                                                    <div class="w-6 h-6 rounded-full">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5                 6L21 3m0 0h-5.25M21 3v5.25" />
+                                                        </svg>
+                                                    </div>
+                                                <% end %>
+                                            </div>
+                                        <% end %>
+                                    <% end %>
+                                </div>
+                            <% end %>
+                            <div class="w-full flex flex-1 flex-col items-center justify-center gap-2">
+                                <%= link_to 'Edit', edit_user_path(current_user), data: {turbo_frame: :modal, action: "click -> dialog#open"}, class:"w-full text-sm text-center font-semibold bg-gray-300 text-gray-600 px-2 py-1 rounded-md hover:text-md" %>
+                                <%= link_to 'Logout', logout_path, data: { confirm: 'Are you sure?', turbo_method: :delete }, class:"w-full text-sm font-semibold bg-orange-500 text-center px-2 py-1 rounded-md" %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% else %>
+                <% result = current_user.name.split.map(&:first).join.upcase %>
+                <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                <div class="w-11 h-11 m-2 bg-amber-400 border-none rounded-xl flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                    <p class="text-black text-xl font-bold font-serif cursor-pointer"><%= result %> </p>
+                    <!-- tooltip -->
+                    <div class="min-w-fit max-h-[30em] overflow-y-auto hide-scrollbar flex-row items-center justify-center cursor-default  text-sm bg-slate-800 text-white p-2 gap-2 rounded-md hidden absolute left-14 top-0" style="white-space: nowrap;" id="tooltip" role="tooltip">
+                        <!-- tooltip text will appear here -->
+                        <div class="flex flex-col justify-center items-center h-fit gap-2">
+                            <div class="flex items-center justify-center">
+                                <% if current_user.profile_image.attached?%>
+                                    <%= image_tag(current_user.profile_image, class:"w-20 h-20 my-1 border-none rounded-full cursor-pointer") %>
+                                <% else %>
+                                    <% result = current_user.name.split.map(&:first).join.upcase %>
+                                    <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                                    <div class="w-20 h-20 my-1 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                                        <p class="text-black text-xl font-bold font-serif"><%= result %> </p>
+                                    </div>
+                                <% end %>
+                            </div>
+                            <!-- Name and username -->
+                            <div class="min-w-60 max-w-72 flex-wrap rounded-md flex flex-col flex-1 items-start justify-center bg-gray-700 px-4 py-1 ">
+                                <p class="text-start flex flex-1 text-lg font-semibold text-gray-200"><%= current_user.name %></p>
+                                <P class="text-start text-sm font-medium"><%= current_user.username %></P>
+                                <p class="text-start flex flex-1 text-sm font-medium text-gray-200"><%= current_user.email %></p>
+                                <hr class="w-full h-[0.5px] my-2 mx-auto border-0 rounded  dark:bg-gray-600">
+                                <p class="text-start flex flex-1 text-sm font-semibold text-gray-200">MEMBER SINCE</p>
+                                <p class="text-start flex flex-1 text-sm font-medium text-gray-200"><%= current_user.created_at.in_time_zone("Mumbai").strftime("%d %B, %Y") %></p>
+                                <hr class="w-full h-[0.5px] my-2 mx-auto border-0 rounded  dark:bg-gray-600">
+                                <p class="text-start flex flex-1 text-sm font-semibold text-gray-200">ABOUT</p>
+                                <p class="text-start text-md font-semibold text-[#fff] ">
+                                    <!-- about content -->
+                                    <span class="text-md text-wrap break-words"><%= current_user.about %></span>
+                                </p>
+                            </div>
+                            
+                            <!-- listing all communities a user is a admin of -->
+                            <% if current_user.communities.count > 0 %>
+                                <div class="min-w-60 max-w-72 flex-wrap rounded-md flex flex-col flex-1 items-start justify-center bg-gray-700 px-4 py-1 max-h-[20em] overflow-y-auto hide-scrollbar">
+                                    <p class="text-start flex flex-1 text-md font-semibold text-gray-200">ADMIN COMMUNITIES</p>
+                                    <hr class="w-full h-[0.5px] my-2 mx-auto border-0 rounded  dark:bg-gray-600">
+                                    <% current_user.communities.each do |community|%>
+                                        <% if community.admin_id == current_user.id %>
+                                            <div class="my-0.5 flex flex-row items-center justify-between gap-2">
+                                                <div class="flex items-center justify-center">
+                                                    <%= image_tag community.community_profile, class:"w-6 h-6 rounded-full bg-[#2a6fff]" %>
+                                                </div>
+                                                <div class="flex-1 justify-start">
+                                                    <%= community.name[0,18]%>...
+                                                </div>
+                                                <%= link_to community, class: "block" do %>
+                                                    <div class="w-6 h-6 rounded-full">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5                 6L21 3m0 0h-5.25M21 3v5.25" />
+                                                        </svg>
+                                                    </div>
+                                                <% end %>
+                                            </div>
+                                        <% end %>
+                                    <% end %>
+                                </div>
+                            <% end %>
+                            <div class="w-full flex flex-1 flex-col items-center justify-center gap-2">
+                                <%= link_to 'Edit', edit_user_path(current_user), data: {turbo_frame: :modal, action: "click -> dialog#open"}, class:"w-full text-sm text-center font-semibold bg-gray-300 text-gray-600 px-2 py-1 rounded-md hover:text-md" %>
+                                <%= link_to 'Logout', logout_path, data: { confirm: 'Are you sure?', turbo_method: :delete }, class:"w-full text-sm font-semibold bg-orange-500 text-center px-2 py-1 rounded-md" %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
             <% if @communities.count != 0%>
                 <p class="text-xs bg-green-500 font-semibold text-white shadow-md rounded-md text-center"><%= @communities.count %></p>
             <% end %>
@@ -27,7 +164,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg>
                 </div>
-            <% end %>            
+            <% end %>
 
             <!-- TODO: Create new community with modal -->
             <%= link_to new_community_path, data: {turbo_frame: :modal, action: "click -> dialog#open"}, class: "block" do %>
@@ -53,7 +190,7 @@
 
                 <!-- TODO: create a partial for showing all latest posts from all communities acurrent_user is part of -->
                 <% if @all_messages.count <= 0 %>
-                    <p class="text-center text-xl font-semibold text-[#a6a8aa] py-2">You have not shared any posts yet...</p>
+                    <p class="w-full flex items-center justify-center text-center text-4xl font-semibold text-orange-950 py-2">You have not shared any posts yet...</p>
                 <% else %>
                     <% @all_messages.each do |message|%>
                         <% if message.post_image.attached? %>

@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="dialog"
 export default class extends Controller {
   connect() {
     this.open()
@@ -13,7 +12,6 @@ export default class extends Controller {
   }
 
   // hide modal on successful form submission
-  // data-action="turbo:submit-end->turbo-modal#submitEnd"
   submitEnd(e) {
     if (e.detail.success) {
       this.close()
@@ -36,7 +34,6 @@ export default class extends Controller {
   enableBodyScroll() {
     document.body.classList.remove('overflow-hidden')
   }
-
   clickOutside(event) {
     if (event.target === this.element) {
       this.close()

@@ -1,14 +1,6 @@
 <div data-controller="previews">
     <div class="relative">
-        <!--
-        <div class="w-fit h-fit flex items-center justify-center">
-            <% if message.post_image.attached? %>
-                <%= image_tag message.post_image, data: { previews_target: "preview" }, class: "w-40 h-20" %>
-            <% else %>
-                <%= image_tag "", data: { previews_target: "preview" }, class: "w-40 h-20" %>
-            <% end %>
-        </div>
-        -->
+        
 
         <label for="post_image" class="w-8 h-8 border-none rounded-full text-white cursor-pointer flex items-center justify-center bg-[#0083ff]">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 hover:w-6 hover:h-6">
@@ -21,5 +13,15 @@
             accept: "image/*", 
             direct_upload: true, 
             data: { previews_target: "input", action: "change->previews#preview" } %>
+        
+        <!--
+        <div class="w-fit h-fit flex items-center justify-center">
+            <% if message.post_image.attached? %>
+                <%= image_tag message.post_image, data: { previews_target: "preview" }, class: "w-40 h-20" %>
+            <% else %>
+                <%= image_tag "", data: { previews_target: "preview" }, class: "w-40 h-20" %>
+            <% end %>
+        </div>
+        -->
     </div>
 </div>

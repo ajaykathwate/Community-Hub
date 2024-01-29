@@ -16,6 +16,10 @@ Rails.application.routes.draw do
 
   get '/accept_request/:id', to: 'join_communities#accept_request', as: 'accept_request_to_join_community'
 
+  get '/reject_request/:id', to: 'join_communities#reject_request', as: 'reject_request_to_join_community'
+
+  delete '/delete_post/:id', to: 'video_posts#delete_post', as: 'delete_post'
+
   resource :user_sessions, only: [:new, :create, :destroy]
 
   resources :users
@@ -29,5 +33,13 @@ Rails.application.routes.draw do
   resources :chat_rooms do
     resources :messages
   end
+
+  resources :e_learning_chat_rooms do
+    resources :video_posts do
+      resources :comments
+    end
+  end
+
+  resources :sports_chat_rooms
 
 end

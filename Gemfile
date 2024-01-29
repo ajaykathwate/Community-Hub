@@ -70,3 +70,5 @@ group :test do
 end
 
 gem "tailwindcss-rails", "~> 2.3"
+
+gem 'toastr-rails', '~> 1.0', '>= 1.0.3'

@@ -3,10 +3,12 @@
 
     <!-- TODO: Chatroom section and messaging functionality -->
   
-    <div class=" flex flex-row items-center justify-start gap-3 mx-2">
-        <%= image_tag(community.community_profile, class: " w-10 h-10 rounded-full") %>
-        <div class="flex flex-1 flex-col items-start justify-items-start">
-            <div class="flex flex-row">
+    <div class=" flex flex-row items-center justify-start gap-3 mx-2 mb-2">
+        <div class="relative" id="btn_community_show" aria-describedby="tooltip_community">
+            <%= image_tag(community.community_profile, class: " w-12 h-12 rounded-full cursor-pointer transform hover:scale-125 transition duration-200 ease-in-out") %>
+        </div>
+        <div class="relative flex flex-1 flex-col items-start justify-items-start">
+            <div class="flex flex-row ">
                 <p class="text-lg font-medium text-black"><%= community.name%></p>
                 <!-- TODO: Create new community with modal -->
                 <% if community_admin.id == current_user.id %>
@@ -19,9 +21,44 @@
                     <% end %>
                 <% end %>
             </div>
-            <p class="text-sm text-[#a6a8aa]"><%= community.users.count%> members</p>
+            <p class="text-sm text-[#a6a8aa] "><%= community.users.count%> members</p>
+            <!-- tooltip -->
+            <div class="min-w-fit max-h-[30em] overflow-y-auto hide-scrollbar flex flex-row items-start justify-start cursor-default  text-sm bg-slate-800 text-white py-2 px-4 gap-5 rounded-md hidden absolute -left-12 top-14" style="white-space: nowrap;" id="tooltip_community" role="tooltip_community">
+                <%= image_tag(community.community_profile, class:"h-36 w-36") %>
+                <div class=" max-w-96 flex flex-1 flex-col gap-2 py-2">
+                    <p class="text-start text-md font-semibold text-[#fff] ">
+                        Topic : 
+                        <span class="text-md text-slate-400"><%= community.topic %> / 
+                        <% if community.isPrivate %>
+                            Private
+                        <% else %>
+                            Public
+                        <% end %>
+                        </span>
+                    </p>
+                    <p class="text-start text-md font-semibold text-[#fff] ">
+                        About : <span class="text-md text-wrap text-slate-400 break-words"><%= community.about %></span>
+                    </p>
+                    <% user = User.find(community.admin_id)%>
+                    <p class="text-start text-md font-semibold text-[#fff] ">
+                        Created by <span class="text-md text-wrap text-slate-400 break-words"><%= user.name %>, <%= community.created_at.in_time_zone("Mumbai").strftime("%d/%m/%Y") %> </span>
+                    </p>
+
+                </div>
+            </div>
         </div>
-        <div class=" px-1"> 
+        <!-- switching between communities -->
+        <% if @single_community.topic == "E-Learning" || @single_community.topic == "Sports"%>
+            <div class="flex flex-row rounded-full bg-blue-200 gap-2 px-2 py-1">
+                    <% if @single_community.topic == 'E-Learning' %>
+                        <p class="text-sm font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Learning</p>
+                    <% elsif @single_community.topic == 'Sports'%>
+                        <p class="text-sm font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Sports</p>
+                    <% end %>
+                    <p class="text-sm font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Chatroom</p>
+            </div>
+        <% end %>
+        <div class="px-1">
             <% if @community_admin.id != current_user.id %>
                 <%= link_to leave_community_path(community), class: "block" do %>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-500 cursor-pointer transform hover:scale-110 transition duration-500 ease-in-out ">
@@ -37,19 +74,39 @@
             <% end %>
         </div>
     </div>
-    <div class="flex flex-1 flex-col bg-[#f4f6fa] rounded-md my-2 max-h-[31.5em] overflow-y-auto custom-scrollbar">
 
-        <!-- chatroom : render a _message_form partial here -->
-        <%= turbo_stream_from @single_chatroom %>
-        <div id="messages">
-            <%= render @messages%>
+    <!-- here ChatRoom or E-Learning or Sports community is present -->
+
+    <% if community.topic == "E-Learning"%>
+        <div class=" rounded-md flex flex-1 flex-col bg-[#f4f6fa]">
+            <div class="flex flex-1 flex-col bg-[#f4f6fa] rounded-md px-5 my-2 py-2 max-h-[33.5em] overflow-y-auto custom-scrollbar">
+                <!-- post -->
+                <%= turbo_stream_from @e_learning_chat_room %>
+                <div id="video_posts" class="flex flex-row gap-5 ">
+                    <%= render @video_posts %>
+                </div>
+            </div>
+            <div class="flex items-center justify-center mb-1">
+                <div class="bg-[#2a6fff] rounded-full flex flex-row gap-2 px-2 py-1 cursor-pointer transform hover:scale-105 transition duration-200 ease-in-out">
+                    <%= render "layouts/new_video_post_form" %>
+                </div>
+            </div>
         </div>
-        
-    </div>
-    <%= render 'layouts/new_message_form' %>
+    <% else%>
+        <div class="flex flex-1 flex-col bg-[#f4f6fa] rounded-md my-2 p-2 max-h-[33em] overflow-y-auto custom-scrollbar">
+            <%= turbo_stream_from @single_chatroom %>
+            <div id="messages">
+                <%= render @messages%>
+            </div>
+        </div>
+        <%= render 'layouts/new_message_form' %>
+
+    <% end %>
     
 
 </section>
+
+
     
 <!-- Community members list and Join requests -->
 <!-- TODO: list the community members and community join request section(visible only if current_user is a admin of the community) -->
@@ -61,13 +118,29 @@
             <img src="https://cdn-icons-png.flaticon.com/128/657/657694.png" alt="admin", class="w-3.5 h-3.5 text-[#a6a8aa]">
         </div>
         <div class="flex flex-row items-center justify-start gap-3 py-1 px-2">
-            <%= image_tag(community_admin.profile_image, class: "w-8 h-8 rounded-full") %>
+            <% if community_admin.profile_image.attached?%>
+                <%= image_tag(community_admin.profile_image, class: "w-8 h-8 rounded-full") %>
+            <% else %>
+                <% result = community_admin.name.split.map(&:first).join.upcase %>
+                <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                    <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                </div>
+            <% end %>
             <p class="text-md text-[#7a7a7a]"><%= community_admin.username%></p>
         </div>
         <p class="text-start text-sm font-semibold text-[#a6a8aa] py-2">Community Members - <%= community.users.count%> </p>
         <% community.users.each do |user|%>
             <div class="flex flex-row items-center justify-start gap-3 py-1 px-2">
-                <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
+                <% if user.profile_image.attached?%>
+                    <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
+                <% else %>
+                    <% result = user.name.split.map(&:first).join.upcase %>
+                    <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                    <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                        <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                    </div>
+                <% end %>
                 <p class="text-md text-[#7a7a7a]"><%= user.username%></p>
             </div>
         <% end %>
@@ -85,15 +158,50 @@
 
         <% pending_requests.each do |p| %>
             <div class="flex flex-row items-center justify-start gap-3 py-1 px-2">
-                <%= image_tag(community_admin.profile_image, class: "w-8 h-8 rounded-full") %>
-                <p class="text-md text-[#7a7a7a] flex-1"><%= community_admin.username%></p>
-                <%= link_to accept_request_to_join_community_path(p), class: "block" do %>
-                    <div class="flex items-center justify-center w-10 h-8 bg-[#cfe5fb] rounded-md cursor-pointer hover:w-11 hover:h-8">
-                        <img src="https://cdn-icons-png.flaticon.com/128/4505/4505201.png" alt="accept-request" class="w-6 h-6 text-[#a6a8aa]">
+                <% pending_user = User.find(p.user_id) %>
+                <% if pending_user.profile_image.attached?%>
+                    <%= image_tag(pending_user.profile_image, class: "w-8 h-8 rounded-full") %>
+                <% else %>
+                    <% result = pending_user.name.split.map(&:first).join.upcase %>
+                    <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                    <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                        <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                    </div>
+                <% end %>
+                <p class="text-md text-[#7a7a7a] flex-1"><%= pending_user.username%></p>
+                <%= link_to accept_request_to_join_community_path(p), class: "block cursor-pointer transform hover:scale-125 transition duration-500 ease-in-out " do %>
+                    <div class="flex items-center justify-center w-6 h-6 rounded-full cursor-pointer  ">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5 font-bold text-green-500">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                    </div>
+                <% end %>
+                <%= link_to reject_request_to_join_community_path(p), class: "block cursor-pointer transform hover:scale-125 transition duration-500 ease-in-out " do %>
+                    <div class="flex items-center justify-center w-6 h-6 rounded-full cursor-pointer  ">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 font-bold text-red-500">
+                          <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                        </svg>
                     </div>
                 <% end %>
             </div>
         <% end %>
     </div>
-
 </section>
+
+
+<script>
+  console.log("connected... new method");
+  window.addEventListener('DOMContentLoaded', ()=>{
+    const btn_community_show = document.querySelector('#btn_community_show');
+    const tooltip_community = document.querySelector('#tooltip_community');
+    
+    btn_community_show.addEventListener('mouseenter', ()=>{
+      console.log("mouse enter..")
+      tooltip_community.classList.remove('hidden');
+    })
+    btn_community_show.addEventListener('mouseleave', ()=>{
+      console.log("mouse out..")
+      tooltip_community.classList.add('hidden');
+    })
+  })
+</script>

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  e_learning_chat_room: one
+  title: MyString
+  likes: 1
+
+two:
+  user: two
+  e_learning_chat_room: two
+  title: MyString
+  likes: 1

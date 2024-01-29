@@ -5,16 +5,12 @@ class MessagesController < ApplicationController
   end
 
   def create
-
     @single_chatroom = ChatRoom.find(params[:chat_room_id])
     @message = @single_chatroom.messages.build(msg_params)
     @message.user = current_user
 
     if @message.save
-      # Assuming you want to use Turbo Streams to update the messages
       turbo_stream.append :messages, partial: 'messages/message', locals: { message: @message }
-    else
-      # Handle validation errors or other issues
     end
   end
 

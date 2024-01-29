@@ -18,6 +18,10 @@ class User < ApplicationRecord
 
   has_many :messages, dependent: :destroy
 
+  has_many :video_posts, dependent: :destroy
+
+  has_many :comments, dependent: :destroy
+
   belongs_to :admin, class_name: "Community", foreign_key: "admin_id", optional: true
 
   scope :all_except, -> (user) {where.not(id: user)}

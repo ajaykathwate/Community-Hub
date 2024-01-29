@@ -8,13 +8,15 @@ class JoinCommunitiesController < ApplicationController
     # communities a user os not part of
     @communities = Community.where.not(id: current_user.communities.pluck(:id))
 
+    @searched_communities = Community.filter_by_name(params[:name])
+
   end
 
     # a user added to the communities
   def join
     @community = Community.find(params[:id])
     current_user.communities << @community
-    redirect_to app_path, notice: "You have joined the community successfully."
+    redirect_to app_path
   end
 
   # requests to join community
@@ -38,10 +40,26 @@ class JoinCommunitiesController < ApplicationController
 
     # if both the value are present then only add the user to the community.
     if @requested_user && @community
-      @community.users << @requested_user
-      @accept_join_request.update(accepted: true)
+      unless @community.users.include?(@requested_user)
+        @community.users << @requested_user
+        @accept_join_request.update(accepted: true)
+      end
       redirect_to app_path
-    else
+      else
+      redirect_to app_path
+    end
+  end
+
+  def reject_request
+    # fetch the join comunity request and find @community and @request_user from it.
+    @accept_join_request = JoinRequest.find(params[:id])
+    @community = Community.find(@accept_join_request.community_id)
+    @requested_user = User.find(@accept_join_request.user_id)
+
+     if @requested_user && @community
+      JoinRequest.where(user_id: @requested_user.id, community_id: @community.id).destroy_all
+      redirect_to app_path
+      else
       redirect_to app_path
     end
   end
@@ -50,7 +68,6 @@ class JoinCommunitiesController < ApplicationController
   def leave_community
     @leave_community = Community.find(params[:id])
     Rails.logger.info("Attempting to leave community #{params[:id]} for user #{current_user.id}")
-    # Assuming you have a join table for user and community called `community_users`
     current_user.communities.delete(@leave_community)
     Rails.logger.info("Left community successfully.")
     redirect_to app_path

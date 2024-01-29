@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_24_102359) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_29_111118) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -45,6 +45,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_24_102359) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "comments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "video_post_id", null: false
+    t.string "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_comments_on_user_id"
+    t.index ["video_post_id"], name: "index_comments_on_video_post_id"
+  end
+
   create_table "communities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "topic"
@@ -63,7 +73,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_24_102359) do
     t.index ["community_id"], name: "index_community_users_on_community_id"
     t.index ["user_id"], name: "index_community_users_on_user_id"
   end
- 
+
+  create_table "e_learning_chat_rooms", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "community_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "join_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "community_id", null: false
@@ -85,6 +101,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_24_102359) do
     t.integer "likes", default: 0
   end
 
+  create_table "sports_chat_rooms", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "community_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "username"
@@ -93,14 +115,30 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_24_102359) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "admin_id"
+    t.text "about"
     t.index ["admin_id"], name: "index_users_on_admin_id"
+  end
+
+  create_table "video_posts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "e_learning_chat_room_id", null: false
+    t.string "title"
+    t.integer "likes", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["e_learning_chat_room_id"], name: "index_video_posts_on_e_learning_chat_room_id"
+    t.index ["user_id"], name: "index_video_posts_on_user_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "comments", "users"
+  add_foreign_key "comments", "video_posts"
   add_foreign_key "community_users", "communities"
   add_foreign_key "community_users", "users"
   add_foreign_key "join_requests", "communities"
   add_foreign_key "join_requests", "users"
   add_foreign_key "users", "communities", column: "admin_id"
+  add_foreign_key "video_posts", "e_learning_chat_rooms"
+  add_foreign_key "video_posts", "users"
 end

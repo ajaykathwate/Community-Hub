@@ -14,11 +14,12 @@
  *= require_self
  */
 
+
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
 }
 
- .custom-scrollbar {
+.custom-scrollbar {
   scrollbar-width: thin; 
   scrollbar-color: #4a5568 #2d3748;
 }
