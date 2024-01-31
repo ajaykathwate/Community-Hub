@@ -6,9 +6,7 @@ class JoinCommunitiesController < ApplicationController
 
   def index
     # communities a user os not part of
-    @communities = Community.where.not(id: current_user.communities.pluck(:id))
-
-    @searched_communities = Community.filter_by_name(params[:name])
+    @communities = Community.order(created_at: :asc).where.not(id: current_user.communities.pluck(:id))
 
   end
 
@@ -77,7 +75,7 @@ class JoinCommunitiesController < ApplicationController
     @community = Community.find(params[:id])
     if @community.destroy
       Rails.logger.info("Deleted community successfully.")
-      redirect_to app_path
+      redirect_to app_path, notice:"Community Deleted Successfully!"
     else
       redirect_to :back
     end

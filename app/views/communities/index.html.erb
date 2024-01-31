@@ -186,50 +186,60 @@
             <%= render 'layouts/show_community', community: @single_community, community_members: @community_members, community_admin: @community_admin, pending_requests: @pending_requests %>
         <% else %>
             <!-- listing all latest posts from all communities a current_user is part of -->
-            <section class="flex flex-1 flex-row max-w-full flex-wrap justify-between gap-y-5 py-5 max-h-screen overflow-y-auto custom-scrollbar">
+            <section class="flex flex-1 flex-col items-center gap-2 py-2 max-h-screen overflow-y-auto custom-scrollbar">
 
                 <!-- TODO: create a partial for showing all latest posts from all communities acurrent_user is part of -->
                 <% if @all_messages.count <= 0 %>
                     <p class="w-full flex items-center justify-center text-center text-4xl font-semibold text-orange-950 py-2">You have not shared any posts yet...</p>
                 <% else %>
+                    <p class="text-xl font-semibold py-1 px-2 bg-yellow-200 rounded-full">Posts Messages</p>
                     <% @all_messages.each do |message|%>
                         <% if message.post_image.attached? %>
-                            <div class="flex flex-row justify-start gap-1 my-2 mx-2 ">
-                                <% if message.user.profile_image.attached? %>
-                                <div>
-                                    <%= image_tag(message.user.profile_image, class: "w-8 h-8 rounded-full") %>
-                                </div>
+                            <div class="flex w-full flex-row justify-center my-2 mx-2 hover:rounded-md hover:bg-slate-300 p-2">
+                                
+                                <% if message.user.profile_image.attached?%>
+                                    <%= image_tag(message.user.profile_image, class:"w-14 h-14 my-1 border-none rounded-full cursor-pointer") %>
+                                <% else %>
+                                    <% result = current_user.name.split.map(&:first).join.upcase %>
+                                    <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                                    <div class="w-14 h-14 my-1 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                                        <p class="text-black text-lg font-bold font-serif"><%= result %> </p>
+                                    </div>
                                 <% end %>
                                 <div class="bg- w-fit flex flex-col items-start justify-start px-2 gap-y-0.5">
-                                    <p class="text-sm font-medium "><%= message.user.name %></p>
+                                    <p class="text-md font-medium "><%= message.user.name %></p>
                                     <div class="flex flex-col gap-0.5">
-                                        <p class=" text-sm w-fit h-fit px-2 py-2 self-start text-left bg-[#fff] rounded-r-lg rounded-bl-lg"><%= message.content%></p>
+                                        <p class=" text-md w-fit h-fit px-2 py-2 self-start text-left bg-[#fff] rounded-r-lg rounded-bl-lg"><%= message.content%></p>
 
                                         <!-- image preview if image available -->
                                         <% if message.post_image.attached? %>
                                             <div class="flex flex-row justify-between items-center gap-2">
-                                                <div class="bg-[#fff] w- rounded-xl py-1 px-1 flex-col flex gap-1               justify-between"> 
-                                                    <%= image_tag(message.post_image, class: "w-72 h-48 bg-cover rounded-xl cursor-pointer") %>
+                                                <div class="bg-[#fff] w- rounded-xl py-1 px-1 flex-col flex gap-1 justify-between"> 
+                                                    <%= image_tag(message.post_image, class: "w-96 h-58 bg-cover rounded-xl cursor-pointer") %>
                                                 </div>
                                                 <div class="rounded-full flex flex-row  gap-1 w-fit h-fit px-2 py-0.5 ">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-yellow-500 cursor-pointer transform hover:scale-125 transition duration-500 ease-in-out ">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-yellow-500 cursor-pointer transform hover:scale-125 transition duration-500 ease-in-out ">
                                                         <path d="M7.493 18.5c-.425 0-.82-.236-.975-.632A7.48 7.48 0 0 1 6 15.125c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75A.75.75 0 0 1 15 2a2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23h-.777ZM2.331 10.727a11.969 11.969 0 0 0-.831 4.398 12 12 0 0 0 .52 3.507C2.28 19.482 3.105 20 3.994 20H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 0 1-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227Z" />
                                                     </svg>
                                                     <!-- if the current user lies then count will come in bold and blue in color-->
                                                     <% if message.likes > 0 %>
-                                                        <p class="text-sm font-semibold "><%= message.likes %></p>
+                                                        <p class="text-lg font-semibold "><%= message.likes %></p>
                                                     <% end %>
                                                 </div>
                                             </div>
                                         <% end %>
-                                        <p class="text-[0.6em] self-start text-left font-medium text-[#8a8a8a]"><%= message.created_at.in_time_zone('Mumbai').strftime("%I:%M %p") %></p>
+                                        <p class="text-sm self-start text-left font-medium text-slate-800">
+                                        <%= time_ago_in_words(message.created_at.in_time_zone("Mumbai")) %> ago
+                                        </p>
+                                        <p class="text-sm font-medium text-black text-wrap">
+                                            From, <%= Community.find(ChatRoom.find(message.chat_room_id).community_id).name%> community
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         <% end %>
                     <% end %>
                 <% end %>
-
             </section>
         <% end %>
     </section>

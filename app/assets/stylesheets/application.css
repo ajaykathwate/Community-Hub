@@ -37,3 +37,12 @@
 .custom-scrollbar::-webkit-scrollbar-track {
   background-color: #f4f6fa;
 }
+
+/* Add or modify your CSS as needed */
+.e-learning-chatroom {
+  display: none;
+}
+
+.regular-chatroom {
+  display: block;
+}

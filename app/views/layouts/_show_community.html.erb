@@ -1,9 +1,10 @@
 <!-- Selected community info -->
-<section class="flex flex-1 flex-col justify-between bg-white my-1 mx-2 rounded-md py-2 px-2">
+<section class="flex flex-1 flex-col justify-between bg-white my-1 mx-2 rounded-md py-2 px-2" >
 
     <!-- TODO: Chatroom section and messaging functionality -->
   
-    <div class=" flex flex-row items-center justify-start gap-3 mx-2 mb-2">
+    <!-- Community header which displays community profile, name, toggle between communities and delete or leave community buttons -->
+    <div class=" flex flex-row items-center justify-start gap-3 mx-2 mb-2" >
         <div class="relative" id="btn_community_show" aria-describedby="tooltip_community">
             <%= image_tag(community.community_profile, class: " w-12 h-12 rounded-full cursor-pointer transform hover:scale-125 transition duration-200 ease-in-out") %>
         </div>
@@ -22,7 +23,7 @@
                 <% end %>
             </div>
             <p class="text-sm text-[#a6a8aa] "><%= community.users.count%> members</p>
-            <!-- tooltip -->
+            <!-- TOOLTIP for community info -->
             <div class="min-w-fit max-h-[30em] overflow-y-auto hide-scrollbar flex flex-row items-start justify-start cursor-default  text-sm bg-slate-800 text-white py-2 px-4 gap-5 rounded-md hidden absolute -left-12 top-14" style="white-space: nowrap;" id="tooltip_community" role="tooltip_community">
                 <%= image_tag(community.community_profile, class:"h-36 w-36") %>
                 <div class=" max-w-96 flex flex-1 flex-col gap-2 py-2">
@@ -47,17 +48,19 @@
                 </div>
             </div>
         </div>
-        <!-- switching between communities -->
+        <!-- toggle between communities buttons -->
         <% if @single_community.topic == "E-Learning" || @single_community.topic == "Sports"%>
             <div class="flex flex-row rounded-full bg-blue-200 gap-2 px-2 py-1">
-                    <% if @single_community.topic == 'E-Learning' %>
-                        <p class="text-sm font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Learning</p>
-                    <% elsif @single_community.topic == 'Sports'%>
-                        <p class="text-sm font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Sports</p>
-                    <% end %>
-                    <p class="text-sm font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Chatroom</p>
+                <% if @single_community.topic == 'E-Learning' %>
+                        <button id="btn-eLearning" class="text-sm font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Learning</button>
+                <% end %>
+                <% if @single_community.topic == 'Sports'%>
+                        <button id="btn-eLearning" class="text-sm font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Sports</button>
+                <% end %>
+                    <button id="btn-chatRoom" class="text-sm font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Chatroom</button>
             </div>
         <% end %>
+        <!-- DELETE community buttons -->
         <div class="px-1">
             <% if @community_admin.id != current_user.id %>
                 <%= link_to leave_community_path(community), class: "block" do %>
@@ -75,35 +78,43 @@
         </div>
     </div>
 
-    <!-- here ChatRoom or E-Learning or Sports community is present -->
+    <!-- This is a community part which shows the chat_room or e-learning chatroom -->
+        <% if @single_community.topic == "E-Learning"%>
+            <!-- START: show e-learning chat_room -->
+            <div id="eLearning-div" class="hidden rounded-md flex flex-1 flex-col bg-[#f4f6fa]">
+                <div class="flex flex-1 flex-col items-center justify-start bg-[#f4f6fa] rounded-md px-5 my-2 py-2 max-h-[33.5em] overflow-y-auto custom-scrollbar w-full">
+                    <!-- post -->
+                    <%= turbo_stream_from @e_learning_chat_room %>
+                    <div id="video_posts" class="gap-5 ">
+                        <%= render @video_posts, community_admin: @community_admin %>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center mb-1">
+                    <div class="bg-[#2a6fff] rounded-full flex flex-row gap-2 px-2 py-1 cursor-pointer transform hover:scale-105 transition duration-200 ease-in-out">
+                        <%= render "layouts/new_video_post_form" %>
+                    </div>
+                </div>
+            </div>
+            <!-- END: show e-learning chat_room -->
+        <% end %>
+        <% if @single_community.topic == "Sports"%>
+            <div id="eLearning-div" class="hidden flex flex-col flex-1 bg-[#f4f6fa] rounded-md p-2">
+                <p><b>Sports Community</b></p>
+            </div>
+        <% end %>
+    <!-- START: show chat_room -->
 
-    <% if community.topic == "E-Learning"%>
-        <div class=" rounded-md flex flex-1 flex-col bg-[#f4f6fa]">
-            <div class="flex flex-1 flex-col bg-[#f4f6fa] rounded-md px-5 my-2 py-2 max-h-[33.5em] overflow-y-auto custom-scrollbar">
-                <!-- post -->
-                <%= turbo_stream_from @e_learning_chat_room %>
-                <div id="video_posts" class="flex flex-row gap-5 ">
-                    <%= render @video_posts %>
-                </div>
-            </div>
-            <div class="flex items-center justify-center mb-1">
-                <div class="bg-[#2a6fff] rounded-full flex flex-row gap-2 px-2 py-1 cursor-pointer transform hover:scale-105 transition duration-200 ease-in-out">
-                    <%= render "layouts/new_video_post_form" %>
-                </div>
-            </div>
-        </div>
-    <% else%>
-        <div class="flex flex-1 flex-col bg-[#f4f6fa] rounded-md my-2 p-2 max-h-[33em] overflow-y-auto custom-scrollbar">
+    <div id="chatRoom-div" class=" flex flex-col flex-1 ">
+        <div  class=" flex flex-1 flex-col bg-[#f4f6fa] rounded-md my-2 p-2 w-full max-h-[33em] overflow-y-auto custom-scrollbar" >
             <%= turbo_stream_from @single_chatroom %>
-            <div id="messages">
+            <div id="messages"data-controller="scroll">
                 <%= render @messages%>
             </div>
         </div>
-        <%= render 'layouts/new_message_form' %>
-
-    <% end %>
-    
-
+        <%= render 'layouts/new_message_form' %>    
+    </div>
+    <!-- END: show chat_room -->
+ 
 </section>
 
 
@@ -145,47 +156,49 @@
             </div>
         <% end %>
     </div>
-    <hr class="w-full h-2 mx-auto bg-[#000] border-0 rounded  dark:bg-gray-200">
-    <div class="flex flex-col bg-white py-1 px-2 rounded-md">
-        <div class="flex flex-row items-center justify-start gap-2">
-            <p class="text-start text-sm font-semibold text-[#a6a8aa] py-2">Requests </p>
-            <img src="https://cdn-icons-png.flaticon.com/128/1592/1592490.png" alt="admin", class="w-4 h-4 text-[#a6a8aa]">
-        </div>
-
-        <% if pending_requests.count <= 0 %>
-            <p class="text-center text-sm font-semibold text-[#a6a8aa] py-2">No Requests Pending...</p>
-        <% end %>
-
-        <% pending_requests.each do |p| %>
-            <div class="flex flex-row items-center justify-start gap-3 py-1 px-2">
-                <% pending_user = User.find(p.user_id) %>
-                <% if pending_user.profile_image.attached?%>
-                    <%= image_tag(pending_user.profile_image, class: "w-8 h-8 rounded-full") %>
-                <% else %>
-                    <% result = pending_user.name.split.map(&:first).join.upcase %>
-                    <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
-                    <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
-                        <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
-                    </div>
-                <% end %>
-                <p class="text-md text-[#7a7a7a] flex-1"><%= pending_user.username%></p>
-                <%= link_to accept_request_to_join_community_path(p), class: "block cursor-pointer transform hover:scale-125 transition duration-500 ease-in-out " do %>
-                    <div class="flex items-center justify-center w-6 h-6 rounded-full cursor-pointer  ">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5 font-bold text-green-500">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                        </svg>
-                    </div>
-                <% end %>
-                <%= link_to reject_request_to_join_community_path(p), class: "block cursor-pointer transform hover:scale-125 transition duration-500 ease-in-out " do %>
-                    <div class="flex items-center justify-center w-6 h-6 rounded-full cursor-pointer  ">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 font-bold text-red-500">
-                          <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                <% end %>
+    <% if current_user.id == @community_admin.id && @single_community.isPrivate %>
+        <hr class="w-full h-2 mx-auto bg-[#000] border-0 rounded  dark:bg-gray-200">
+        <div class="flex flex-col bg-white py-1 px-2 rounded-md">
+            <div class="flex flex-row items-center justify-start gap-2">
+                <p class="text-start text-sm font-semibold text-[#a6a8aa] py-2">Requests </p>
+                <img src="https://cdn-icons-png.flaticon.com/128/1592/1592490.png" alt="admin", class="w-4 h-4 text-[#a6a8aa]">
             </div>
-        <% end %>
-    </div>
+
+            <% if pending_requests.count <= 0 %>
+                <p class="text-center text-sm font-semibold text-[#a6a8aa] py-2">No Requests Pending...</p>
+            <% end %>
+
+            <% pending_requests.each do |p| %>
+                <div class="flex flex-row items-center justify-start gap-3 py-1 px-2">
+                    <% pending_user = User.find(p.user_id) %>
+                    <% if pending_user.profile_image.attached?%>
+                        <%= image_tag(pending_user.profile_image, class: "w-8 h-8 rounded-full") %>
+                    <% else %>
+                        <% result = pending_user.name.split.map(&:first).join.upcase %>
+                        <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                        <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                            <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                        </div>
+                    <% end %>
+                    <p class="text-md text-[#7a7a7a] flex-1"><%= pending_user.username%></p>
+                    <%= link_to accept_request_to_join_community_path(p), class: "block cursor-pointer transform hover:scale-125 transition duration-500 ease-in-out " do %>
+                        <div class="flex items-center justify-center w-6 h-6 rounded-full cursor-pointer  ">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5 font-bold text-green-500">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                        </div>
+                    <% end %>
+                    <%= link_to reject_request_to_join_community_path(p), class: "block cursor-pointer transform hover:scale-125 transition duration-500 ease-in-out " do %>
+                        <div class="flex items-center justify-center w-6 h-6 rounded-full cursor-pointer  ">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 font-bold text-red-500">
+                            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    <% end %>
+                </div>
+            <% end %>
+        </div>
+    <% end %>
 </section>
 
 
@@ -204,4 +217,29 @@
       tooltip_community.classList.add('hidden');
     })
   })
+
+    const chatDiv = document.getElementById("chatRoom-div")
+    const eLearningDiv = document.getElementById("eLearning-div")
+    const sportsDiv = document.getElementById("sports-div")
+
+    const chatButton = document.getElementById("btn-chatRoom")
+    chatButton.addEventListener("click",()=>{
+        console.log("chat button clicked....")
+        chatDiv.classList.remove("hidden")
+        eLearningDiv.classList.add("hidden")
+        sportsDiv.classList.add("hidden")
+    })
+    const eLearningButton = document.getElementById("btn-eLearning")
+    eLearningButton.addEventListener("click",()=>{
+        chatDiv.classList.add("hidden")
+        eLearningDiv.classList.remove("hidden")
+        sportsDiv.classList.add("hidden")
+    })
+    const sportsButton = document.getElementById("btn-sports")
+    sportsButton.addEventListener("click",()=>{
+        console.log("sports button clicked....")
+        chatDiv.classList.add("hidden")
+        sportsDiv.classList.remove("hidden")
+    })
+
 </script>

@@ -17,8 +17,12 @@ class MessagesController < ApplicationController
   def like_post
     # check for the below message which parameter is taken by params[:id]
     @message = Message.find(params[:id])
-    Message.increment_counter(:likes, @message.id)
-    render :nothing => true
+    if @message.increment!(:likes)
+    turbo_stream.replace(
+      render(partial: 'messages/message', locals: { message: @message }),
+      target: "message_#{@message.id}"
+    )
+    end
   end
 
   private

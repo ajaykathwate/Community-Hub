@@ -22,16 +22,15 @@
                 </div>
                 <div class="flex- flex-row">
                     <div class=" text-black flex justify-start gap-2">
-                        <label class="inline-flex items-center">
-                          <%= form.radio_button :topic, 'E-Learning', class: 'form-radio h-4 w-4 text-indigo-600', data: { target: 'community-topic-input' } %>
-                          <span class="ml-1 text-sm text-gray-950">E-Learning</span>
-                        </label>
-                        <label class="inline-flex items-center">
-                          <%= form.radio_button :topic, 'Sports', class: 'form-radio h-4 w-4 text-indigo-600', data: { target: 'community-topic-input' } %>
-                          <span class="ml-1 text-sm text-gray-950">Sports</span>
-                        </label>
+                        <div class="inline-flex items-center">
+                          <%= form.radio_button :topic, 'E-Learning',id:"topic", class: 'form-radio h-4 w-4 text-indigo-600' %>
+                          <%= form.label :topic_eLearning, "E-Learning", class:"ml-1 text-sm text-gray-950"%>
+                        </div>
+                        <div class="inline-flex items-center">
+                          <%= form.radio_button :topic, 'Sports', id:"topic", class: 'form-radio h-4 w-4 text-indigo-600' %>
+                          <%= form.label :topic_sports, "Sports", class:"ml-1 text-sm text-gray-950"%>
+                        </div>
                         <%= form.text_field :topic, class: 'form-input flex-1 flex w-full px-4 py-2 text-sm border-none rounded-md bg-[#f4f6fa] text-[#000]', id: 'community-topic-input',  placeholder: "Custom Topic" %>
-
                     </div>
                 </div>
             </div>
@@ -57,16 +56,5 @@
             </div>
         </div>
     </div>
-
-
-
-    <script>
-    const topicRadio = document.querySelector('[data-target="community-topic-input"]');
-    const topicInput = document.getElementById('community-topic-input');
-
-    topicRadio.addEventListener('change', () => {
-      topicInput.disabled = topicRadio.value !== '';
-    });
-  </script>
 
 <% end %>

@@ -10,9 +10,9 @@ class VideoPostsController < ApplicationController
     @video_post.user = current_user
 
     if @video_post.save
-      turbo_stream.append :video_posts, partial: 'video_posts/video_post', locals: { video_post: @video_post }
+      turbo_stream.append :video_posts, partial: 'video_posts/video_post', locals: { video_post: @video_post }, notice:"Post Created Successfully!"
     else
-      render :new
+      render :new, notice:"Error occured while creating community, Try again!"
     end
   end
 
@@ -20,7 +20,7 @@ class VideoPostsController < ApplicationController
     @video_post = VideoPost.find(params[:id])
     if @video_post.destroy
       Rails.logger.info("Deleted Post successfully.")
-      redirect_to app_path
+      redirect_to app_path, notice:"Video Post deleted successfully!"
     else
       redirect_to :back
     end

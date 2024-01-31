@@ -24,8 +24,11 @@ class Community < ApplicationRecord
   # validations for community input fields
   validates :name, :topic, :admin_id, presence: true, length: { maximum: 255 }
   validates :name, uniqueness: true
+  validates :community_profile, presence: :true
   validates :about, presence: true, uniqueness: true, length: { minimum: 10, maximum: 1000 }
 
-  scope :filter_by_name, ->(name) { where(name: name) if name }
+  def self.ransackable_attributes(auth_object = nil)
+    ["about", "admin_id", "created_at", "id", "id_value", "isPrivate", "name", "topic", "updated_at"]
+  end
 
 end

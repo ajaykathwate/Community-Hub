@@ -1,5 +1,6 @@
 <%= form_with(model: @Comment,  remote: true) do |form| %>
 
+    <%= current_user.name %>
     <div class="flex flex-1 flex-row items-center justify-between">
         <% if current_user.profile_image.attached?%>
             <%= image_tag(current_user.profile_image, class: "w-8 h-8 rounded-full") %>

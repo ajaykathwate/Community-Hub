@@ -7,7 +7,6 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
-    <link href="toastr.css" rel="stylesheet"/>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
@@ -43,8 +42,9 @@
   <body>
     <%= turbo_frame_tag :modal  %>
     <main class="mx-auto m-0 p-0 flex hide-scrollbar">
+    <%= render "shared/notifications", message: flash[:notice]%>
       <%= yield %>
     </main>
-    <script src="toastr.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
   </body>
 </html>

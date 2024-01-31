@@ -15,7 +15,6 @@ class CommunitiesController < ApplicationController
       @video_posts = @e_learning_chat_room.video_posts.order(created_at: :asc)
     end
 
-
     @current_user = current_user
 
     @message = Message.new
@@ -79,7 +78,6 @@ class CommunitiesController < ApplicationController
     end
   end
 
-
   def edit
     @community = Community.find(params[:id])
   end
@@ -87,7 +85,7 @@ class CommunitiesController < ApplicationController
   def update
     @community = Community.find(params[:id])
     if @community.update(community_params)
-      redirect_to app_path
+      redirect_to app_path, notice: "Community Updated Successfully!"
     else
       render edit_communities_path(@community)
     end

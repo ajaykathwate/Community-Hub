@@ -1,6 +1,8 @@
 <% @communities.each do |community| %>
     <div class="w-full rounded-md flex flex-row items-center justify-between gap-2 my-2 px-2">
-        <%= image_tag community.community_profile, class:"w-8 h-8 rounded-full"%>
+        <% if community.community_profile.attached?%>
+            <%= image_tag community.community_profile, class:"w-8 h-8 rounded-full"%>
+        <% end %>
         <div class=" flex flex-1 flex-row items-center justify-between gap-3">
             <p class="text-md text-wrap font-medium text-black"><%= community.name %> </p>
         </div>
