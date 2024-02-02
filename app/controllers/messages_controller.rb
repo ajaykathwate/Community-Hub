@@ -3,7 +3,7 @@ class MessagesController < ApplicationController
   def new
     @message = Message.new
   end
-
+ 
   def create
     @single_chatroom = ChatRoom.find(params[:chat_room_id])
     @message = @single_chatroom.messages.build(msg_params)

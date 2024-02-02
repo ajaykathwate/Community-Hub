@@ -31,12 +31,15 @@ Rails.application.routes.draw do
   get '/like_post/:id', to:"messages#like_post", as: "like_post"
 
   resources :chat_rooms do
-    resources :messages
+    resources :messages do
+      resource :like, module: :messages
+    end
   end
 
   resources :e_learning_chat_rooms do
     resources :video_posts do
       resources :comments
+      resource :like, module: :video_posts
     end
   end
 

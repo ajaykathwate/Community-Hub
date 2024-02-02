@@ -1,6 +1,6 @@
 class User < ApplicationRecord
 
-  has_one_attached :profile_image 
+  has_one_attached :profile_image
 
   has_secure_password
 
@@ -21,6 +21,8 @@ class User < ApplicationRecord
   has_many :video_posts, dependent: :destroy
 
   has_many :comments, dependent: :destroy
+
+  has_many :likes
 
   belongs_to :admin, class_name: "Community", foreign_key: "admin_id", optional: true
 
