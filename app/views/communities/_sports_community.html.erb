@@ -1,0 +1,43 @@
+<div class="flex flex-col items-center justify-center w-full">
+
+    <!-- dropdown to select type of data -->
+    <!-- dropdown options: all_matches, all_players, current_matches_list -->
+    
+
+    
+    
+    <!-- div to display data in table format -->
+    <div class="flex flex-1 max-h-[33em] flex-col overflow-y-auto custom-scrollbar rounded-lg border border-slate-300">
+
+        <% if @matches %>
+            <table class="min-w-full">
+                <thead class="bg-blue-500">
+                    <tr class="border border-slate-300 ">
+                        <th class="py-1 px-2 border border-slate-300">Country Name</th>
+                        <th class="py-1 px-2 border border-slate-300">Match Type</th>
+                        <th class="py-1 px-2 border border-slate-300">Status</th>
+                        <th class="py-1 px-2 border border-slate-300">Venue</th>
+                        <th class="py-1 px-2 border border-slate-300 w-fit">Date</th>
+                    </tr>
+                </thead>
+            <tbody>
+                <% @matches.each do |match| %>
+                    <tr class="hover:bg-blue-300 hover:cursor-pointer border border-slate-300">
+                        <td class="py-1 px-2 border border-slate-300"><%= match['name'] %></td>
+                        <td class="py-1 px-2 border border-slate-300"><%= match['matchType'] %></td>
+                        <td class="py-1 px-2 border border-slate-300"><%= match['status'] %></td>
+                        <td class="py-1 px-2 border border-slate-300"><%= match['venue'] %></td>
+                        <td class="py-1 px-2 border border-slate-300 w-fit"><%= match['date'] %></td>
+                    </tr>
+                <% end %>
+            </tbody>
+            </table>
+        <% else %>
+            <p class="text-red-500">Error fetching data from the API</p>
+        <% end %>
+    </div>
+
+
+    <!-- Pagination part -->
+
+</div>

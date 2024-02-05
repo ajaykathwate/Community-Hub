@@ -29,7 +29,20 @@ class CommunitiesController < ApplicationController
 
     @pending_requests = @single_community.join_requests.where(accepted: false)
 
+    @matches = fetch_cricket_data
+
     render 'index'
+  end
+
+  def fetch_cricket_data
+    apikey = "5d50503b-36c0-468d-a237-8042ddf2c53a"
+    url = "https://api.cricapi.com/v1/matches?apikey=#{apikey}&offset=0"
+    response = RestClient.get(url)
+    data = JSON.parse(response.body)
+    data['data']
+  rescue RestClient::ExceptionWithResponse => e
+    puts "Error fetching data from the API: #{e.response.body}"
+    nil
   end
 
   # index page with "/app" route

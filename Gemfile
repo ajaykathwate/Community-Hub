@@ -75,3 +75,6 @@ gem "tailwindcss-rails", "~> 2.3"
 
 
 gem 'ransack', github: 'activerecord-hackery/ransack'
+
+gem 'rest-client'
+
