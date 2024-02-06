@@ -1,8 +1,9 @@
 import consumer from "channels/consumer"
 
-consumer.subscriptions.create({channel: "RoomChannel", chat_room_id: 25}, { 
+consumer.subscriptions.create({channel: "RoomChannel", chat_room_id: 25}, {
   connected() {
-    console.log("connected... to room channel");
+
+    console.log("Connected to ActionCable...");
     // Called when the subscription is ready for use on the server
   },
 
@@ -11,7 +12,10 @@ consumer.subscriptions.create({channel: "RoomChannel", chat_room_id: 25}, {
   },
 
   received(data) {
-    // Called when there's incoming data on the websocket for this channel
-    console.log(data);
+    console.log(data.html);
+    const msgContainer = document.getElementById('messages')
+    console.log("MessageContainer: " + msgContainer);
+    msgContainer.innerHTML = msgContainer.innerHTML +  data.html
+    msgContainer.lastElementChild.scrollIntoView({behavior: "smooth"})
   }
 });

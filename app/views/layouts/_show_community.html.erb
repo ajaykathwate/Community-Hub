@@ -107,9 +107,11 @@
 
     <div id="chatRoom-div" class=" flex flex-col flex-1 ">
         <div  class=" flex flex-1 flex-col bg-[#f4f6fa] rounded-md my-2 p-2 w-full max-h-[33em] overflow-y-auto custom-scrollbar" >
-            <%= turbo_stream_from @single_chatroom %>
-            <div id="messages"data-controller="scroll">
-                <%= render @messages%>
+            
+            <div id="messages" data-controller="scroll">
+                <% @messages.each do |message|%>
+                    <%= render 'messages/message', message: message %>
+                <% end %>
             </div>
         </div>
         <%= render 'layouts/new_message_form' %>    
