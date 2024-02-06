@@ -3,15 +3,22 @@ class MessagesController < ApplicationController
   def new
     @message = Message.new
   end
- 
+
   def create
     @single_chatroom = ChatRoom.find(params[:chat_room_id])
     @message = @single_chatroom.messages.build(msg_params)
     @message.user = current_user
 
     if @message.save
-      turbo_stream.append :messages, partial: 'messages/message', locals: { message: @message }
+      html =render(
+        partial: "messages/message",
+        locals:{message: @message}
+      )
+
+      ActionCable.server.broadcast("room_channel_#{@message.chat_room_id}", {html: html} )
     end
+
+    #   turbo_stream.append :messages, partial: 'messages/message', locals: { message: @message }
   end
 
   def like_post
