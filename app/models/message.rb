@@ -1,5 +1,7 @@
 class Message < ApplicationRecord
 
+  searchkick text_middle: %i[content]
+
   belongs_to :chat_room
   belongs_to :user
 

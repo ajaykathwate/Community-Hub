@@ -46,3 +46,22 @@
 .regular-chatroom {
   display: block;
 }
+
+ .tag {
+    background:#0045c6;
+    color:#FFF;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin: 0.5em;
+    border-radius: 0.25em;
+    display: inline-block;
+ }
+
+.collapse-content {
+  display: none;
+}
+.expanded {
+  display: block;
+}

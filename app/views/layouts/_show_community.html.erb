@@ -1,3 +1,5 @@
+<div id="chat-room-id" data-chat-room-id="<%= @single_chatroom.try(:id) %>"></div>
+
 <!-- Selected community info -->
 <section class="flex flex-1 flex-col justify-between bg-white my-1 mx-2 rounded-md py-2 px-2" >
 
@@ -133,13 +135,17 @@
         </div>
         <div class="flex flex-row items-center justify-start gap-3 py-1 px-2">
             <% if community_admin.profile_image.attached?%>
-                <%= image_tag(community_admin.profile_image, class: "w-8 h-8 rounded-full") %>
+                <%= link_to user, class: "block" do %>
+                    <%= image_tag(community_admin.profile_image, class: "w-8 h-8 rounded-full") %>
+                <% end %>
             <% else %>
-                <% result = community_admin.name.split.map(&:first).join.upcase %>
-                <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
-                <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
-                    <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
-                </div>
+                <%= link_to user, class: "block" do %>
+                    <% result = community_admin.name.split.map(&:first).join.upcase %>
+                    <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                    <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                        <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                    </div>
+                <% end %>
             <% end %>
             <p class="text-md text-[#7a7a7a]"><%= community_admin.username%></p>
         </div>
@@ -147,13 +153,17 @@
         <% community.users.each do |user|%>
             <div class="flex flex-row items-center justify-start gap-3 py-1 px-2">
                 <% if user.profile_image.attached?%>
-                    <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
+                    <%= link_to user, class: "block" do %>
+                        <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
+                    <% end %>
                 <% else %>
-                    <% result = user.name.split.map(&:first).join.upcase %>
-                    <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
-                    <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
-                        <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
-                    </div>
+                    <%= link_to user, class: "block" do %>
+                        <% result = user.name.split.map(&:first).join.upcase %>
+                        <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                        <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                            <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                        </div>
+                    <% end %>
                 <% end %>
                 <p class="text-md text-[#7a7a7a]"><%= user.username%></p>
             </div>
@@ -232,6 +242,7 @@
         eLearningDiv.classList.add("hidden")
         sportsDiv.classList.add("hidden")
     })
+    
     const eLearningButton = document.getElementById("btn-eLearning")
     eLearningButton.addEventListener("click",()=>{
         chatDiv.classList.add("hidden")

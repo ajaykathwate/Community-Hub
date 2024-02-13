@@ -1,4 +1,7 @@
 class Community < ApplicationRecord
+
+  after_update :notify_users
+
   has_one_attached :community_profile
 
   has_one :chat_room, class_name: "ChatRoom", dependent: :destroy
@@ -29,6 +32,13 @@ class Community < ApplicationRecord
 
   def self.ransackable_attributes(auth_object = nil)
     ["about", "admin_id", "created_at", "id", "id_value", "isPrivate", "name", "topic", "updated_at"]
+  end
+
+  def notify_users
+    ActionCable.server.broadcast("notifications_channel", {
+        body: "#{self.name} community is been updated.",
+        requireInteraction: true
+    })
   end
 
 end

@@ -1,9 +1,13 @@
 class VideoPost < ApplicationRecord
+  # after_create :notify_users
 
   has_one_attached :video_file
 
   belongs_to :user
   belongs_to :e_learning_chat_room
+
+  has_many :taggables, dependent: :destroy
+  has_many :tags, through: :taggables
 
   has_many :comments, dependent: :destroy
 
@@ -24,5 +28,12 @@ class VideoPost < ApplicationRecord
   def unlike(user)
     likes.where(user: user).destroy_all
   end
+
+  # def notify_users
+  #   ActionCable.server.broadcast("notifications_channel", {
+  #       title: self.title,
+  #       body: self.body
+  #   })
+  # end
 
 end

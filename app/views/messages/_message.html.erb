@@ -2,13 +2,17 @@
 <div class="flex flex-row justify-start gap-1 p-2 rounded-md hover:bg-slate-200">
     <div>
         <% if message.user.profile_image.attached?%>
-            <%= image_tag(message.user.profile_image, class: "w-8 h-8 rounded-full") %>
+            <%= link_to message.user, class: "block" do %>
+                <%= image_tag(message.user.profile_image, class: "w-8 h-8 rounded-full") %>
+            <% end %>
         <% else %>
-            <% result = message.user.name.split.map(&:first).join.upcase %>
-            <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
-            <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
-                <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
-            </div>
+            <%= link_to message.user, class: "block" do %>
+                <% result = message.user.name.split.map(&:first).join.upcase %>
+                <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                    <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                </div>
+            <% end %>
         <% end %>
     </div>
     <div class="bg- w-fit flex flex-col items-start justify-start px-2 gap-y-0.5">

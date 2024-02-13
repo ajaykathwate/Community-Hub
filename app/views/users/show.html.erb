@@ -1,13 +1,89 @@
-<%= render 'layouts/user_modal' do %>
-    <div action="turbo:submit-end->turbo-modal#submitEnd" class="fixed z-1 p-6 left-44 top-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-auto bg-white w-fit h-fit rounded-2xl shadow-xl">
-        
-        <p>Ajay Kathwate</p>
-        <p>Ajay Kathwate</p>
-        <p>Ajay Kathwate</p>
-        <p>Ajay Kathwate</p>
-        <p>Ajay Kathwate</p>
-        <p>Ajay Kathwate</p>
-        <p>Ajay Kathwate</p>
-
-    </div>
+<% if notice.present? %>
+  <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
 <% end %>
+
+<!-- User's overview page -->
+<% user = User.find(params[:id])%>
+
+<%= link_to 'Go Back', :back, class:"mx-2 my-2 w-20 h-fit items-center flex justtify-center text-center border-gray-500 border-2 px-2 py-1 text-sm font-light rounded-full" %>
+<div class="w-screen h-screen flex items-center justify-center">
+    <div class="w-fit h-fit p-5 rounded-md flex flex-col shadow-md items-center justify-center gap-5 rounded-mf bg-blue-300">
+        <p class="w-fit p-2 flex items-center justify-center bg-orange-50 shadow-sm rounded-md text-lg font-semibold">User Details</p>
+        <div class="w-fit h-fit flex flex-row bg-orange-100 items-center justify-center gap-5 rounded-md shadow-md">
+            <div class="flex flex-row items-center justify-center gap-2">
+                <%=image_tag(user.profile_image, class:"w-20 h-20 rounded-full") %>
+                <table class="min-w-full divide-y divide-gray-200 gap-2 rounded-md">
+                    <tbody class="divide-y divide-gray-200 rounded-md">
+                        <tr class="rounded-md hover:bg-orange-50">
+                            <td class="px-4 text-md font-medium text-black py-2 whitespace-nowrap">Name</td>
+                            <td class="px-4 text-md font-normal text-black py-2 whitespace-nowrap"><%= user.name%></td>
+                        </tr>
+                        <tr class="rounded-md hover:bg-orange-50 ">
+                            <td class="px-4 text-md font-medium text-black py-2 whitespace-nowrap">Username</td>
+                            <td class="px-4 text-md font-normal text-black py-2 whitespace-nowrap"><%= user.username%></td>
+                        </tr>
+                        <tr class="rounded-md hover:bg-orange-50 ">
+                            <td class="px-4 text-md font-medium text-black py-2 whitespace-nowrap">Email</td>
+                            <td class="px-4 text-md font-normal text-black py-2 whitespace-nowrap"><%= user.email %></td>
+                        </tr>
+                        <tr class="rounded-md hover:bg-orange-50 ">
+                            <td class="px-4 text-md font-medium text-black py-2 whitespace-nowrap">About</td>
+                            <td class="px-4 text-md font-normal text-black py-2 whitespace-nowrap"><%= user.about.length == 0?"No about present..." : user.about %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="flex flex-row items-start justify-center rounded-md bg-orange-50 gap-5">
+            <!-- communities created by this user -->
+            <div class=" p-2 min-h-[20em] rounded-md max-h-[20em]">
+                <p class="w-full text-md text-center p-2 font-semibold ">Communities by me</p>
+                <% if user.communities.count > 0 %>
+                    <% user.communities.each do |community|%>
+                        <% if community.admin_id == user.id %>
+                            <div class="w-full h-fit flex flex-row items-center justify-between gap-2 px-8 py-1">
+                                <%= image_tag(community.community_profile, class:"w-8 h-8 rounded-full ") %>
+                                <p class="flex flex-1 text-left text-sm font-medium"><%= community.name[0,30]%></p>
+                                <%= link_to community, class: "block" do %>
+                                    <div class="w-5 h-5 rounded-full">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5                 6L21 3m0 0h-5.25M21 3v5.25" />
+                                        </svg>
+                                    </div>
+                                <% end %>
+                            </div>
+                        <% end %>
+                    <% end %>  
+                <% end %>
+            </div>
+
+            <!-- likes or comments -->
+            <div class="  p-2 rounded-md min-h-[20em] max-h-[20em]">
+                <p class="w-full text-md text-center p-2 font-semibold ">Interacted Posts</p>
+                <% VideoPost.all.each do |post| %>
+                    <% post.likes.each do |like|%>
+                        <% if like.user_id == user.id %>
+                        <div class="w-full h-fit flex flex-row items-center justify-between gap-2 px-8 py-1">
+                                <p><%= post.title %></p>
+                        </div>
+                        <% end %>
+                    <% end %>
+                <% end %>
+            </div>
+            <!-- Tags or posts created by ths user -->
+            <div class=" p-2 rounded-md min-h-[20em] max-h-[20em]">
+                <p class="w-full text-md text-center p-2 font-semibold ">Posts</p>
+                <% VideoPost.all.each do |post|%>
+                    <% if post.user_id == user.id %>
+                        <div class=" flex flex-row items-center justify-start gap-2 px-2 py-1">
+                            <%= link_to e_learning_chat_room_video_post_path(post.e_learning_chat_room_id, post), class: "flex items-center justify-start gap-2", style: "text-decoration: none;" do %>
+                                <%= image_tag User.find(post.user_id).profile_image, class: "w-8 h-8 rounded-full" %>
+                                <p><%= post.title %></p>
+                            <% end %>
+                        </div>
+                    <% end %>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

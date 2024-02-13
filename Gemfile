@@ -78,3 +78,11 @@ gem 'ransack', github: 'activerecord-hackery/ransack'
 
 gem 'rest-client'
 
+# gems for searching
+gem 'elasticsearch'
+
+gem 'searchkick'
+
+gem 'maker'
+
+gem 'foreman'

@@ -4,10 +4,15 @@ class VideoPostsController < ApplicationController
     @e_learning_chat_room = ELearningChatRoom.new
   end
 
+  def show
+    @video_post = VideoPost.find(params[:id])
+  end
+
   def create
     @e_learning_chat_room = ELearningChatRoom.find(params[:e_learning_chat_room_id])
-    @video_post = @e_learning_chat_room.video_posts.build(post_params)
+    @video_post = @e_learning_chat_room.video_posts.build(post_params.except(:tags))
     @video_post.user = current_user
+    create_or_delete_video_posts_tags(@video_post, params[:video_post][:tags])
 
     if @video_post.save
       turbo_stream.append :video_posts, partial: 'video_posts/video_post', locals: { video_post: @video_post }, notice:"Post Created Successfully!"
@@ -27,8 +32,16 @@ class VideoPostsController < ApplicationController
   end
 
   private
+  def create_or_delete_video_posts_tags(video_post, tags)
+    video_post.taggables.destroy_all
+    tags = tags.strip.split(",")
+    tags.each do |tag|
+      video_post.tags << Tag.find_or_create_by(name: tag)
+    end
+  end
+
   def post_params
-    params.require(:video_post).permit(:title, :user_id, :likes, :video_file)
+    params.require(:video_post).permit(:title, :user_id, :likes, :video_file, :tags)
   end
 
 end

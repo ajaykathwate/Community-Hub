@@ -1,9 +1,12 @@
 import consumer from "channels/consumer"
 
-consumer.subscriptions.create({channel: "RoomChannel", chat_room_id: 25}, {
+const room_element = document.getElementById('chat-room-id');
+const chat_room_id = room_element.getAttribute('data-chat-room-id');
+
+consumer.subscriptions.create({channel: "RoomChannel", chat_room_id: chat_room_id}, {
   connected() {
 
-    console.log("Connected to ActionCable...");
+    console.log("Connected to ActionCable..." + chat_room_id);
     // Called when the subscription is ready for use on the server
   },
 

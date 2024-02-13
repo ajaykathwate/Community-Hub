@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :tags
 
   root to: "homepages#index"
 
@@ -26,6 +27,8 @@ Rails.application.routes.draw do
 
   resources :communities
 
+  get '/explore', to:"explore#index", as:"explore"
+
   resources :join_communities, only: [:index, :join]
 
   get '/like_post/:id', to:"messages#like_post", as: "like_post"
@@ -44,5 +47,10 @@ Rails.application.routes.draw do
   end
 
   resources :sports_chat_rooms
+
+  resources :notifications, only: [:create]
+
+
+  post '/create_new_notification', to:"notifications#new", as:'create_new_notification'
 
 end
