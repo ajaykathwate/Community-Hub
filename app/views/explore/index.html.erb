@@ -13,8 +13,19 @@
         <div class="w-full h-fit flex flex-col items-center justify-center gap-2">
             <!-- search bar to search on tags, caption, title, etc. -->
             <div class="w-full flex-1 flex flex-row items-center justify-center px-20 py-1">
-                <div class="w-full h-fit bg-[#efefef] px-4 py-1 rounded-md shadow-md">
-                    Search...
+                <div class="w-full h-fit bg-[#efefef] px-4 py-1 rounded-md shadow-md relative">
+                    <!-- Global search bar -->
+                    <%= form_with(url: searches_index_path(turbo_frame: "search_results"),
+                            method: "get",
+                            data: { "turbo-frame": "search_results",
+                                    controller: "search",
+                                    "search-target": "form" }) do |form| %>
+                        <%= form.search_field :query,
+                            placeholder: "Search posts, users, communities...",
+                            autocomplete: "off",
+                            data: { action: "input->search#search" }, 
+                            class:"w-full h-fit" %>
+                    <% end %>
                 </div>
             </div>
             <!-- tags -->
@@ -25,6 +36,9 @@
             </div>
         </div>
 
+        <turbo-frame id="search_results" target="_top">
+            
+        </turbo-frame>
         <!-- Showing results -->
         <div class="flex flex-col items-start justify-center gap-2 p-2">
             <% @shuffled_records.each do |record| %>

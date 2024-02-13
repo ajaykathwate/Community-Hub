@@ -29,6 +29,8 @@ class VideoPost < ApplicationRecord
     likes.where(user: user).destroy_all
   end
 
+  scope :containing, ->(query){where("title LIKE ?", "%#{query}%")}
+
   # def notify_users
   #   ActionCable.server.broadcast("notifications_channel", {
   #       title: self.title,

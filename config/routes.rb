@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
-  resources :tags
-
   root to: "homepages#index"
+
+  get 'searches/index'
+
+  resources :tags
 
   get "/app", to: "communities#index"
 

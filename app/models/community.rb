@@ -18,8 +18,10 @@ class Community < ApplicationRecord
 
   has_one :admin, class_name: "User", foreign_key: "admin_id", dependent: :destroy
 
+  # scopes to use in the controllers
   scope :public_communities, -> {where(isPrivate: false)}
   scope :private_communities, -> {where(isPrivate: true)}
+  scope :containing, ->(query){where("name LIKE ?", "%#{query}%")}
 
   # broadcast communities
   after_create_commit { broadcast_append_to "communities"}

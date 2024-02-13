@@ -1,0 +1,38 @@
+<turbo-frame id="search_results">
+    <% if @video_posts %>
+      <ul>
+      
+        <% @video_posts.each do |video_post| %>
+          <li>
+          
+            <p class="text-md font-semibold"><%= video_post.title %></p>
+    
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% if @users %>
+      <ul>
+        <% @users.each do |user| %>
+          <li>
+          
+            <p class="text-md font-semibold"><%= user.name %></p>
+
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% if @communities %>
+      <ul>
+        <% @communities.each do |community| %>
+          <li>
+          
+            <p class="text-md font-semibold"><%= community.name %></p>
+
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+</turbo-frame>

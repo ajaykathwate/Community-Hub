@@ -29,5 +29,6 @@ class User < ApplicationRecord
   belongs_to :admin, class_name: "Community", foreign_key: "admin_id", optional: true
 
   scope :all_except, -> (user) {where.not(id: user)}
+  scope :containing, ->(query){where("name LIKE ?", "%#{query}%")}
 
 end
