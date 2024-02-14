@@ -65,3 +65,23 @@
 .expanded {
   display: block;
 }
+
+.video-search-results:hover{
+  background-color: rgb(131, 131, 192);
+  border-radius: 8px;
+}
+
+.navbar{
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.video-footer{
+  position: sticky;
+  bottom: 2;
+  z-index: 30;
+}
+
+.video-post{
+  margin-bottom: 20px;
+}

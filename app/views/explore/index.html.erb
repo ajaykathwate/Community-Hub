@@ -4,43 +4,36 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
     </svg>
 <% end %>
-<div class="w-full flex flex-col items-center max-h-screen overflow-y-auto custom-scrollbar px-20">
-    <div class="bg-slate-500">
-        <p class="text-2xl font-semibold font-mono">Explore</p>
-    </div>
-    <div class="w-full h-fit max-w-screen flex flex-col py-2 px-20 items-center  ">
+
+<div class=" w-full flex flex-col items-center max-h-screen overflow-y-auto custom-scrollbar px-20 ">
+    <div class="w-full h-fit max-w-screen flex flex-col px-20 items-center py-2 ">
         <!-- header -->
-        <div class="w-full h-fit flex flex-col items-center justify-center gap-2">
+        <div class="navbar px-8 w-full h-fit flex flex-row items-center justify-center gap-2 py-2 bg-slate-800 rounded-md shadow-md">
+            <p class="text-2xl pb-2 font-semibold font-mono text-white">Explore</p>
             <!-- search bar to search on tags, caption, title, etc. -->
             <div class="w-full flex-1 flex flex-row items-center justify-center px-20 py-1">
-                <div class="w-full h-fit bg-[#efefef] px-4 py-1 rounded-md shadow-md relative">
+                <div class="w-full h-fit bg-[#efefef] rounded-md shadow-md relative">
                     <!-- Global search bar -->
                     <%= form_with(url: searches_index_path(turbo_frame: "search_results"),
                             method: "get",
-                            data: { "turbo-frame": "search_results",
+                            data: { "turbo-frame": "search_results_for_explore_page",
                                     controller: "search",
                                     "search-target": "form" }) do |form| %>
                         <%= form.search_field :query,
                             placeholder: "Search posts, users, communities...",
                             autocomplete: "off",
                             data: { action: "input->search#search" }, 
-                            class:"w-full h-fit" %>
+                            class:"w-full h-fit rounded-md border-none" %>
                     <% end %>
                 </div>
             </div>
-            <!-- tags -->
-            <div class="w-full flex flex-row items-center justify-center gap-2 flex-wrap">
-                <% @tags.each do |tag|%>
-                    <p class="text-sm font-medium px-2 py-1 rounded-md bg-orange-50 cursor-pointer"><%= tag.name %></p>
-                <% end %>
-            </div>
         </div>
 
-        <turbo-frame id="search_results" target="_top">
-            
-        </turbo-frame>
+        <div class="p-2">
+            <turbo-frame id="search_results_for_explore_page" target="_top"></turbo-frame>
+        </div>
         <!-- Showing results -->
-        <div class="flex flex-col items-start justify-center gap-2 p-2">
+        <div class="h-fit w-fit flex flex-col justify-center gap-2 p-2">
             <% @shuffled_records.each do |record| %>
                 <% if record.is_a?(VideoPost) %>
                     <% c = Community.find(ELearningChatRoom.find(record.e_learning_chat_room_id).community_id)%>
@@ -51,6 +44,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                     </svg>
+                                    <p class="text-sm font-normal py-1">From community, </p>
                                     <p class="text-sm font-normal py-1"><%= c.name %></p>
                                 <% end %>
                                 <%= link_to e_learning_chat_room_video_post_path(record.e_learning_chat_room_id, record), class: "flex items-center justify-start gap-2 rounded-md", style: "text-decoration: none;" do %>
@@ -71,20 +65,6 @@
                                 </p>
                             </div>
                             <p class="text-md font-medium"><%= record.title %></p>
-                            <div class="flex flex-row items-center gap-2">
-                                <div class="flex flex-row gap-2 items-center px-2 py-1 border-gray-500 border-2 rounded-full transform hover:scale-110 transition duration-500 ease-in-out">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-yellow-500">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z" />
-                                    </svg>
-                                    <p class="text-md font-semibold "><%= record.likes.count %></p>
-                                </div>
-                                <div class="flex flex-row gap-2 items-center px-2 py-1 border-gray-500 border-2 rounded-full transform hover:scale-110 transition duration-500 ease-in-out">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
-                                    </svg>
-                                    <p class="text-md font-semibold "><%= record.comments.count %></p>
-                                </div>
-                            </div>
                             <div class="flex flex-row items-center justify-start gap-2">
                                 <% record_tags = record.tags %>
                                 <% record_tags.each do |tag|%>
@@ -92,6 +72,28 @@
                                         <p class="px-2  py-0.5 bg-blue-300 rounded-md text-md font-normal"><%= tag.name.capitalize %></p>
                                     <% end %>
                                 <% end %>
+                            </div>
+                            <div class="flex flex-row items-center gap-2">
+                                <%= render partial: 'video_posts/likes', locals:{video_post: record}%>
+                            </div>
+                            <div class="flex flex-row w-full h-fit gap-5">
+                                <div class="flex flex-1 items-center gap-5">
+                                    <%= render 'layouts/new_comment_form', video_post: record, comment: Comment.new %>
+                                    <div class="flex flex-row items-center gap-1">
+                                        <p class="text-md font-semibold text-black ">Comments</p>
+                                        <p class="text-start text-lg font-semibold text-slate-950 py-2"> (<%= record.comments.count%>)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full h-fit rounded-md  flex flex-col">
+                                <button id="show-comments-btn" class="px-2 py-1 bg-blue-300 rounded-md"> Show comments</button>
+                                <div id="comments-div" class="bg-white hidden rounded-md max-h-[20em] overflow-y-auto custom-scrollbar">
+                                    <%= turbo_stream_from record %>
+                                    <div id="comments" class="flex flex-col gap-2">
+                                        <% @comments = record.comments %>
+                                        <%= render @comments %>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     <% end %>
@@ -103,6 +105,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
+                                <p class="text-sm font-normal py-1">From community, </p>
                                 <p class="text-sm font-normal py-1"><%= c.name %></p>
                             <% end %>
                             <!-- all possible message_image info  -->
@@ -112,16 +115,16 @@
                             <div class="flex flex-row items-center justify-start gap-1">
                                 <p class="text-sm">by</p>
                                 <%= link_to User.find(record.user_id), class: "block" do %>
-                                    <%= User.find(record.user_id).username %>
+                                    <p class="text-sm  font-medium text-black">                                
+                                        <%= User.find(record.user_id).username %>,
+                                    </p>
                                 <% end %>
+                                <p class="text-sm  font-medium text-gray-500">
+                                    <%= time_ago_in_words(record.created_at.in_time_zone("Mumbai")) %> ago
+                                </p>
                             </div>
                             <p class="text-wrap text-md"><%= record.content %></p>
-                            <div class="w-fit h-fit flex flex-row gap-2 items-center px-2 py-1 border-gray-500 border-2 rounded-full transform hover:scale-110 transition duration-500 ease-in-out">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-yellow-500">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z" />
-                                    </svg>
-                                    <p class="text-md font-semibold "><%= record.likes.count %></p>
-                                </div>
+                            <%= render partial: 'messages/likes', locals:{message: record}%>
                         </div>
                     <% end %>
                 <% end %>
@@ -130,3 +133,20 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    const commentsDiv = document.getElementById('comments-div')
+    const commentsShowBtn = document.getElementById('show-comments-btn')
+    commentsShowBtn.addEventListener("click",()=>{
+        console.log("button clicked...")
+        if(commentsDiv.classList.contains('hidden')){
+            commentsDiv.classList.remove("hidden")
+            commentsShowBtn.textContent = "Hide comments";
+        }else{
+            commentsDiv.classList.add('hidden')
+            commentsShowBtn.textContent = "Show comments";
+        }
+    })
+
+</script>

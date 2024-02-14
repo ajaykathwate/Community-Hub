@@ -6,12 +6,19 @@
 <% user = User.find(params[:id])%>
 
 <%= link_to 'Go Back', :back, class:"mx-2 my-2 w-20 h-fit items-center flex justtify-center text-center border-gray-500 border-2 px-2 py-1 text-sm font-light rounded-full" %>
-<div class="w-screen h-screen flex items-center justify-center">
-    <div class="w-fit h-fit p-5 rounded-md flex flex-col shadow-md items-center justify-center gap-5 rounded-mf bg-blue-300">
+<div class="w-screen max-h-screen flex items-center justify-center">
+    <div class="w-fit h-fit max-h-screen p-5 rounded-md flex flex-col shadow-md items-center justify-center gap-5 rounded-mf bg-blue-300 overflow-y-auto custom-scrollbar">
         <p class="w-fit p-2 flex items-center justify-center bg-orange-50 shadow-sm rounded-md text-lg font-semibold">User Details</p>
         <div class="w-fit h-fit flex flex-row bg-orange-100 items-center justify-center gap-5 rounded-md shadow-md">
-            <div class="flex flex-row items-center justify-center gap-2">
-                <%=image_tag(user.profile_image, class:"w-20 h-20 rounded-full") %>
+            <div class="w-full flex flex-row items-center justify-center gap-2 p-2">
+                <% if user.profile_image.attached?%>
+                  <%= image_tag(user.profile_image, class: "w-20 h-20 rounded-full") %>
+                <% else %>
+                  <% result = user.name.split.map(&:first).join.upcase %>
+                  <div class="w-20 h-20 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center">
+                      <p class="text-gray-700 text-3xl font-bold font-serif"><%= result %> </p>
+                  </div>
+                <% end %>
                 <table class="min-w-full divide-y divide-gray-200 gap-2 rounded-md">
                     <tbody class="divide-y divide-gray-200 rounded-md">
                         <tr class="rounded-md hover:bg-orange-50">
@@ -36,52 +43,73 @@
         </div>
         <div class="flex flex-row items-start justify-center rounded-md bg-orange-50 gap-5">
             <!-- communities created by this user -->
-            <div class=" p-2 min-h-[20em] rounded-md max-h-[20em]">
-                <p class="w-full text-md text-center p-2 font-semibold ">Communities by me</p>
-                <% if user.communities.count > 0 %>
-                    <% user.communities.each do |community|%>
-                        <% if community.admin_id == user.id %>
-                            <div class="w-full h-fit flex flex-row items-center justify-between gap-2 px-8 py-1">
-                                <%= image_tag(community.community_profile, class:"w-8 h-8 rounded-full ") %>
-                                <p class="flex flex-1 text-left text-sm font-medium"><%= community.name[0,30]%></p>
-                                <%= link_to community, class: "block" do %>
-                                    <div class="w-5 h-5 rounded-full">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5                 6L21 3m0 0h-5.25M21 3v5.25" />
-                                        </svg>
-                                    </div>
-                                <% end %>
-                            </div>
-                        <% end %>
-                    <% end %>  
-                <% end %>
-            </div>
+            <% if user.communities.count > 0 %>
+                <div class=" p-2 rounded-md max-h-20 overflow-y-auto custom-scrollbar">
+                    <p class="w-full text-md text-center p-2 font-semibold ">Communities by me</p>
+                    <% if user.communities.count > 0 %>
+                        <% user.communities.each do |community|%>
+                            <% if community.admin_id == user.id %>
+                                <div class="w-full h-fit flex flex-row items-center justify-between gap-2 px-8 py-1">
+                                    <%= image_tag(community.community_profile, class:"w-8 h-8 rounded-full ") %>
+                                    <p class="flex flex-1 text-left text-sm font-medium"><%= community.name[0,30]%></p>
+                                    <%= link_to community, class: "block" do %>
+                                        <div class="w-5 h-5 rounded-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5                 6L21 3m0 0h-5.25M21 3v5.25" />
+                                            </svg>
+                                        </div>
+                                    <% end %>
+                                </div>
+                            <% end %>
+                        <% end %>  
+                    <% end %>
+                </div>
+            <% end %>
 
             <!-- likes or comments -->
-            <div class="  p-2 rounded-md min-h-[20em] max-h-[20em]">
+            <div class="  p-2 rounded-md max-h-20 overflow-y-auto custom-scrollbar flex flex-col items-center justify-start">
                 <p class="w-full text-md text-center p-2 font-semibold ">Interacted Posts</p>
+                <% count = 0 %>
                 <% VideoPost.all.each do |post| %>
                     <% post.likes.each do |like|%>
                         <% if like.user_id == user.id %>
-                        <div class="w-full h-fit flex flex-row items-center justify-between gap-2 px-8 py-1">
-                                <p><%= post.title %></p>
-                        </div>
+                            <% count = count + 1%>
+                            <div class="w-full h-fit flex flex-row items-center justify-start gap-2 px-8 py-1">
+                                <%= video_tag(post.video_file, controls: false, preload: false, muted:true, class:"w-8 h-8 rounded-md") %>
+                                <p class="text-sm font-medium"><%= post.title %></p>
+                            </div>
                         <% end %>
                     <% end %>
                 <% end %>
+                <% if count == 0 %>
+                    <p class="text-md text-center font-normal">No interacted posts</p>
+                <% end %>
             </div>
-            <!-- Tags or posts created by ths user -->
-            <div class=" p-2 rounded-md min-h-[20em] max-h-[20em]">
+            <!-- posts created by ths user -->
+            <div class=" p-2 rounded-md max-h-24 overflow-y-auto custom-scrollbar">
                 <p class="w-full text-md text-center p-2 font-semibold ">Posts</p>
+                <% count_posts_created = 0 %>
                 <% VideoPost.all.each do |post|%>
                     <% if post.user_id == user.id %>
+                        <% count_posts_created = count_posts_created + 1%>
                         <div class=" flex flex-row items-center justify-start gap-2 px-2 py-1">
                             <%= link_to e_learning_chat_room_video_post_path(post.e_learning_chat_room_id, post), class: "flex items-center justify-start gap-2", style: "text-decoration: none;" do %>
-                                <%= image_tag User.find(post.user_id).profile_image, class: "w-8 h-8 rounded-full" %>
+                                <% user = User.find(post.user_id) %>
+                                <% if user.profile_image.attached?%>
+                                  <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
+                                <% else %>
+                                  <% result = user.name.split.map(&:first).join.upcase %>
+                                  <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                                      <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                                  </div>
+                                <% end %>
                                 <p><%= post.title %></p>
                             <% end %>
                         </div>
                     <% end %>
+                <% end %>
+                <% if count_posts_created == 0 %>
+                    <p class="text-md text-center font-normal">No posts created by you</p>
                 <% end %>
             </div>
         </div>

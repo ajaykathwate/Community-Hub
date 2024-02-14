@@ -7,7 +7,7 @@
   
     <!-- Community header which displays community profile, name, toggle between communities and delete or leave community buttons -->
     <div class=" flex flex-row items-center justify-start gap-3 mx-2 mb-2" >
-        <div class="relative" id="btn_community_show" aria-describedby="tooltip_community">
+        <div id="btn_community_show" aria-describedby="tooltip_community">
             <%= image_tag(community.community_profile, class: " w-12 h-12 rounded-full cursor-pointer transform hover:scale-125 transition duration-200 ease-in-out") %>
         </div>
         <div class="relative flex flex-1 flex-col items-start justify-items-start">
@@ -54,7 +54,7 @@
         <% if @single_community.topic == "E-Learning" || @single_community.topic == "Sports"%>
             <div class="flex flex-row rounded-full bg-blue-200 gap-2 px-2 py-1">
                 <% if @single_community.topic == 'E-Learning' %>
-                        <button id="btn-eLearning" class="text-sm font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Learning</button>
+                        <button id="btn-eLearning" class="text-sm -z-1 font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Learning</button>
                 <% end %>
                 <% if @single_community.topic == 'Sports'%>
                         <button id="btn-eLearning" class="text-sm font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Sports</button>
@@ -87,11 +87,11 @@
                 <div class="flex flex-1 flex-col items-center justify-start bg-[#f4f6fa] rounded-md px-5 my-2 py-2 max-h-[33.5em] overflow-y-auto custom-scrollbar w-full">
                     <!-- post -->
                     <%= turbo_stream_from @e_learning_chat_room %>
-                    <div id="video_posts" class="gap-5 ">
+                    <div id="video_posts" class="gap-5">
                         <%= render @video_posts, community_admin: @community_admin %>
                     </div>
                 </div>
-                <div class="flex items-center justify-center mb-1">
+                <div class="video-footer flex items-center justify-center mb-1">
                     <div class="bg-[#2a6fff] rounded-full flex flex-row gap-2 px-2 py-1 cursor-pointer transform hover:scale-105 transition duration-200 ease-in-out">
                         <%= render "layouts/new_video_post_form" %>
                     </div>

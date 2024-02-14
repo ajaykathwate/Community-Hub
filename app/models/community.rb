@@ -18,11 +18,6 @@ class Community < ApplicationRecord
 
   has_one :admin, class_name: "User", foreign_key: "admin_id", dependent: :destroy
 
-  # scopes to use in the controllers
-  scope :public_communities, -> {where(isPrivate: false)}
-  scope :private_communities, -> {where(isPrivate: true)}
-  scope :containing, ->(query){where("name LIKE ?", "%#{query}%")}
-
   # broadcast communities
   after_create_commit { broadcast_append_to "communities"}
 
@@ -31,6 +26,11 @@ class Community < ApplicationRecord
   validates :name, uniqueness: true
   validates :community_profile, presence: :true
   validates :about, presence: true, uniqueness: true, length: { minimum: 10, maximum: 1000 }
+
+  # scopes to use in the controllers
+  scope :public_communities, -> {where(isPrivate: false)}
+  scope :private_communities, -> {where(isPrivate: true)}
+  scope :containing, ->(query){where("name LIKE ?", "%#{query}%")}
 
   def self.ransackable_attributes(auth_object = nil)
     ["about", "admin_id", "created_at", "id", "id_value", "isPrivate", "name", "topic", "updated_at"]

@@ -13,6 +13,8 @@ class Message < ApplicationRecord
 
   has_many :likes, as: :record
 
+  scope :containing, ->(query){where("content LIKE ?", "%#{query}%")}
+
   def liked_by?(user)
     likes.where(user: user).any?
   end

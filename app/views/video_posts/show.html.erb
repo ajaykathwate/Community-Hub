@@ -1,6 +1,6 @@
 <%= link_to 'Go Back', :back, class:"mx-2 my-2 w-20 h-fit items-center flex justtify-center text-center border-gray-500 border-2 px-2 py-1 text-sm font-light rounded-full" %>
 
-<div class="w-full h-fit flex items-center justify-center p-4">
+<div class="w-full h-fit flex items-center justify-center p-4 gap-2">
     <div class=" flex flex-col rounded-md p-5 min-w-fit hover:bg-slate-200 ">
         <%= video_tag(@video_post.video_file, controls: true, muted:true, class:"w-[38em] h-68 rounded-md") %>
         <div class="flex flex-row flex-1 items-center justify-between">
@@ -41,12 +41,32 @@
                 </div>
             </div>
         </div>
-        <div class="bg-slate-500">
-            <%= turbo_stream_from @video_post %>
-            <div id="comments" class="flex flex-col gap-2">
-                <% @comments = @video_post.comments %>
-                <%= render @comments %>
+        <div class="w-full h-fit rounded-md bg-white flex flex-col ">
+            <button id="show-comments-btn" class="px-2 py-1 bg-blue-300 rounded-md"> Show comments</button>
+            <div id="comments-div" class="bg-slate-500 hidden max-h-[20em] overflow-y-auto custom-scrollbar">
+                <%= turbo_stream_from @video_post %>
+                <div id="comments" class="flex flex-col gap-2">
+                    <% @comments = @video_post.comments %>
+                    <%= render @comments %>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+
+    const commentsDiv = document.getElementById('comments-div')
+    const commentsShowBtn = document.getElementById('show-comments-btn')
+    commentsShowBtn.addEventListener("click",()=>{
+        console.log("button clicked...")
+        if(commentsDiv.classList.contains('hidden')){
+            commentsDiv.classList.remove("hidden")
+            commentsShowBtn.textContent = "Hide comments";
+        }else{
+            commentsDiv.classList.add('hidden')
+            commentsShowBtn.textContent = "Show comments";
+        }
+    })
+
+</script>

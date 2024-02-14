@@ -1,38 +1,209 @@
 <turbo-frame id="search_results">
+  <div class="w-full h-fit bg-white rounded-md flex flex-col items-center justify-center">
     <% if @video_posts %>
-      <ul>
-      
-        <% @video_posts.each do |video_post| %>
-          <li>
-          
-            <p class="text-md font-semibold"><%= video_post.title %></p>
-    
-          </li>
+      <div class="w-full h-fit flex flex-col gap-2">
+        <% if @video_posts.count > 0 %>
+          <p class="bg-slate-500 rounded-md px-2 py-1 text-left text-2xl font-medium">Posts</p>
         <% end %>
-      </ul>
+        <% @video_posts.each do |video_post| %>
+          <%= link_to e_learning_chat_room_video_post_path(video_post.e_learning_chat_room_id, video_post), class: "flex items-center justify-start gap-2 px-2 py-1 flex-row video-search-results cursor-pointer", style: "text-decoration: none;" do %>
+              <%= video_tag(video_post.video_file, controls: false, preload: false, muted:true, class:"w-8 h-8 rounded-md") %>
+              <p class="text-md font-medium"><%= video_post.title %></p>
+          <% end %>
+        <% end %>
+      </div>
     <% end %>
 
     <% if @users %>
-      <ul>
-        <% @users.each do |user| %>
-          <li>
-          
-            <p class="text-md font-semibold"><%= user.name %></p>
-
-          </li>
-        <% end %>
-      </ul>
+      <div class="w-full h-fit flex flex-col gap-2">
+          <% if @users.count > 0 %>
+            <p class="bg-slate-500 rounded-md px-2 py-1 text-left text-2xl font-medium">Users</p>
+          <% end %>
+          <% @users.each do |user| %>
+            <%= link_to user, class: "block px-2 py-1 flex flex-row gap-2 items-center justify-start video-search-results cursor-pointer" do %>
+              <% if user.profile_image.attached?%>
+                <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
+              <% else %>
+                <% result = user.name.split.map(&:first).join.upcase %>
+                <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                    <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                </div>
+              <% end %>
+              <p class="text-md font-medium"><%= user.name %></p>
+            <% end %>
+          <% end %>
+      </div>
     <% end %>
 
     <% if @communities %>
-      <ul>
-        <% @communities.each do |community| %>
-          <li>
-          
-            <p class="text-md font-semibold"><%= community.name %></p>
-
-          </li>
+      <div class="w-full h-fit flex flex-col">
+        <% if @communities.count > 0 %>
+          <p class="bg-slate-500 rounded-md px-2 py-1 text-left text-2xl font-medium">Communities</p>
         <% end %>
-      </ul>
+        <% @communities.each do |community| %>
+          <div class="px-2 py-1 flex flex-row items-center gap-2 video-search-results cursor-pointer">
+            <%= image_tag(community.community_profile) %>
+            <p class="text-md font-semibold"><%= community.name %></p>
+          </div>
+        <% end %>
+      </div>
     <% end %>
+    <% if !@video_posts && !@users && !@communities %>
+      <div class="w-full flex items-center justify-center">
+        <p class="text-xl font-semibold">No results found...</p>
+      </div>
+    <% end %>
+  </div>
 </turbo-frame>
+
+<turbo-frame id="search_results_for_explore_page">
+  <div class="w-full flex flex-col items-center justify-start gap-5">
+
+    <% if @users %>
+      <div class="w-full h-fit flex flex-col gap-2 bg-blue-300 rounded-md">
+          <% if @users.count > 0 %>
+            <p class="bg-slate-500 rounded-md px-2 py-1 text-left text-2xl font-medium">Users</p>
+          <% end %>
+          <% @users.each do |user| %>
+            <%= link_to user, class: "block px-2 py-1 flex flex-row gap-2 items-center justify-start video-search-results cursor-pointer" do %>
+              <% if user.profile_image.attached?%>
+                <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
+              <% else %>
+                <% result = user.name.split.map(&:first).join.upcase %>
+                <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                    <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                </div>
+              <% end %>
+              <p class="text-md font-medium"><%= user.name %></p>
+            <% end %>
+          <% end %>
+      </div>
+    <% end %>
+  
+    <!-- Showing results -->
+    <% if @shuffled_records %>
+        <div class="w-full flex flex-col items-start justify-center gap-2 rounded-md bg-blue-300">
+          <% if @shuffled_records.count > 0 %>
+            <p class="bg-slate-500 rounded-md px-2 py-1 text-center text-2xl font-medium">Posts and Messsages</p>
+          <% end %>
+            <% @shuffled_records.each do |record| %>
+                <% if record.is_a?(VideoPost) %>
+                    <% c = Community.find(ELearningChatRoom.find(record.e_learning_chat_room_id).community_id)%>
+                    <% if !Community.find(ELearningChatRoom.find(record.e_learning_chat_room_id).community_id).isPrivate%>
+                        <div class="p-2 rounded-md bg-white shadow-md flex gap-2 flex-col hover:bg-blue-300">
+                            <div class="flex items-center justify-between">
+                                <%= link_to c, class: "block flex flex-row items-center gap-2" do %>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                    </svg>
+                                    <p class="text-sm font-normal py-1">From community, </p>
+                                    <p class="text-sm font-normal py-1"><%= c.name %></p>
+                                <% end %>
+                                <%= link_to e_learning_chat_room_video_post_path(record.e_learning_chat_room_id, record), class: "flex items-center justify-start gap-2 rounded-md", style: "text-decoration: none;" do %>
+                                    <p class="text-sm font-semibold px-2 py-1">View Post</p>
+                                <% end %>
+                            </div>
+                            <!-- all possible video_post info -->
+                            <%= video_tag(record.video_file, controls: false, preload: false, muted:true, class:"w-[38em] h-68 rounded-md") %>
+                            <div class="flex flex-row items-center justify-start gap-1">
+                                <p class="text-sm">by</p>
+                                <%= link_to User.find(record.user_id), class: "block" do %>
+                                    <p class="text-sm  font-medium text-black">                                
+                                        <%= User.find(record.user_id).username %>,
+                                    </p>
+                                <% end %>
+                                <p class="text-sm  font-medium text-gray-500">
+                                    <%= time_ago_in_words(record.created_at.in_time_zone("Mumbai")) %> ago
+                                </p>
+                            </div>
+                            <p class="text-md font-medium"><%= record.title %></p>
+                            <div class="flex flex-row items-center justify-start gap-2">
+                                <% record_tags = record.tags %>
+                                <% record_tags.each do |tag|%>
+                                    <%= link_to tag, style:"text-decoration:none" do %>
+                                        <p class="px-2  py-0.5 bg-blue-300 rounded-md text-md font-normal"><%= tag.name.capitalize %></p>
+                                    <% end %>
+                                <% end %>
+                            </div>
+                            <div class="flex flex-row items-center gap-2">
+                                <%= render partial: 'video_posts/likes', locals:{video_post: record}%>
+                            </div>
+                            <div class="flex flex-row w-full h-fit gap-5">
+                                <div class="flex flex-1 items-center gap-5">
+                                    <%= render 'layouts/new_comment_form', video_post: record, comment: Comment.new %>
+                                    <div class="flex flex-row items-center gap-1">
+                                        <p class="text-md font-semibold text-black ">Comments</p>
+                                        <p class="text-start text-lg font-semibold text-slate-950 py-2"> (<%= record.comments.count%>)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full h-fit rounded-md  flex flex-col">
+                                <button id="show-comments-btn" class="px-2 py-1 bg-blue-300 rounded-md"> Show comments</button>
+                                <div id="comments-div" class="bg-white hidden rounded-md max-h-[20em] overflow-y-auto custom-scrollbar">
+                                    <%= turbo_stream_from record %>
+                                    <div id="comments" class="flex flex-col gap-2">
+                                        <% @comments = record.comments %>
+                                        <%= render @comments %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                <% elsif record.is_a?(Message) %>
+                    <% c = Community.find(ChatRoom.find(record.chat_room_id).community_id)%>
+                    <% if !c.isPrivate%>
+                        <div class="p-2 rounded-md bg-white shadow-md flex gap-2 flex-col">
+                            <%= link_to c, class: "block flex flex-row items-center gap-2" do %>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                </svg>
+                                <p class="text-sm font-normal py-1">From community, </p>
+                                <p class="text-sm font-normal py-1"><%= c.name %></p>
+                            <% end %>
+                            <!-- all possible message_image info  -->
+                            <% if record.post_image.attached? %>
+                                <%= image_tag(record.post_image, class:"w-96 h-48 bg-cover rounded-xl cursor-pointer") %>
+                            <% end %>
+                            <div class="flex flex-row items-center justify-start gap-1">
+                                <p class="text-sm">by</p>
+                                <%= link_to User.find(record.user_id), class: "block" do %>
+                                    <p class="text-sm  font-medium text-black">                                
+                                        <%= User.find(record.user_id).username %>,
+                                    </p>
+                                <% end %>
+                                <p class="text-sm  font-medium text-gray-500">
+                                    <%= time_ago_in_words(record.created_at.in_time_zone("Mumbai")) %> ago
+                                </p>
+                            </div>
+                            <p class="text-wrap text-md"><%= record.content %></p>
+                            <%= render partial: 'messages/likes', locals:{message: record}%>
+                        </div>
+                    <% end %>
+                <% end %>
+            <% end %>
+        </div>
+    <% end %>
+
+    
+    <hr class="m-2 w-full h-2 mx-auto bg-[#000] border-0 rounded  dark:bg-gray-200">
+  
+  </div>
+
+</turbo-frame>
+
+<script>
+    const commentsDiv = document.getElementById('comments-div')
+    const commentsShowBtn = document.getElementById('show-comments-btn')
+    commentsShowBtn.addEventListener("click",()=>{
+        console.log("button clicked...")
+        if(commentsDiv.classList.contains('hidden')){
+            commentsDiv.classList.remove("hidden")
+            commentsShowBtn.textContent = "Hide comments";
+        }else{
+            commentsDiv.classList.add('hidden')
+            commentsShowBtn.textContent = "Show comments";
+        }
+    })
+</script>
