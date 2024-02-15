@@ -20,6 +20,18 @@
                 <div class="flex items-center justify-start">
                     <p class="text-start text-sm font-semibold text-[#a6a8aa] py-1">Select Topic</p>
                 </div>
+
+
+                <div class="field">
+    <%= form.label :location %>
+    <%= form.select :location, ["Mumbai", "Pune", "Other"], {}, { id: "user_location" } %>
+  </div>
+
+  <div class="field custom-location" style="display: none;">
+    <%= form.label :custom_location %>
+    <%= form.text_field :custom_location %>
+  </div>
+                
                 <div class="flex- flex-row">
                     <div class=" text-black flex justify-start gap-2">
                         <div class="inline-flex items-center">
@@ -58,3 +70,28 @@
     </div>
 
 <% end %>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+  const locationSelect = document.querySelector("#user_location");
+  const customLocationField = document.querySelector(".custom-location");
+
+  locationSelect.addEventListener("change", function() {
+    if (locationSelect.value === "Other") {
+      customLocationField.style.display = "block";
+    } else {
+      customLocationField.style.display = "none";
+    }
+  });
+
+  // Trigger the change event on page load if "Other" is pre-selected
+  if (locationSelect.value === "Other") {
+    customLocationField.style.display = "block";
+  }
+});
+
+
+
+
+</script>

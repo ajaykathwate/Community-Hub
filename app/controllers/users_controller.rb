@@ -21,7 +21,6 @@ class UsersController < ApplicationController
     else
       render :new
     end
-
   end
 
   def edit
@@ -48,5 +47,4 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :username, :email, :password, :profile_image, :about)
     end
-
 end

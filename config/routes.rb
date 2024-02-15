@@ -29,6 +29,8 @@ Rails.application.routes.draw do
 
   resources :communities
 
+  get '/join/communities/:community_id/user/:id', to:"join_communities#show", as:"share_community"
+
   get '/explore', to:"explore#index", as:"explore"
 
   resources :join_communities, only: [:index, :join]

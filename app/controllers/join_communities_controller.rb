@@ -2,31 +2,47 @@ class JoinCommunitiesController < ApplicationController
 
 
   # allow only authenticated user to access these pages
-  before_action :authenticate_user, only: [:index, :join]
+  before_action :authenticate_user, only: [:index, :join, :show]
 
   def index
     # communities a user os not part of
     @communities = Community.order(created_at: :asc).where.not(id: current_user.communities.pluck(:id))
+  end
 
+  def show
+    @user = User.find(params[:id])
+    @community = Community.find(params[:community_id])
+    @joined = false;
+    current_user.communities.each do |c|
+      if c.id == @community.id
+        @joined = true
+      end
+    end
   end
 
     # a user added to the communities
   def join
     @community = Community.find(params[:id])
-    current_user.communities << @community
-    redirect_to app_path
+    unless current_user.communities.include?(@community)
+      current_user.communities << @community
+    end
+    redirect_to community_path(@community)
   end
 
   # requests to join community
   def join_request
     @user = current_user
     @community = Community.find(params[:id])
+    @all_join_requests = JoinRequest.all
     # Create a join request
     @join_request = JoinRequest.new(user: @user, community: @community, accepted: false)
-    if @join_request.save
+    unless @all_join_requests.include?(@join_request)
+      if @join_request.save
       puts "request sent!"
       redirect_to app_path
     end
+    end
+
   end
 
   # accept the join community request
@@ -84,6 +100,7 @@ class JoinCommunitiesController < ApplicationController
     # check if the user is authenticated
   def authenticate_user
     if !current_user
+      session[:fall_back_url] = request.url
       redirect_to new_user_sessions_path
     end
   end

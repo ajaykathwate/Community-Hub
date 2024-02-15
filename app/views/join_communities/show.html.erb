@@ -1,0 +1,30 @@
+<div class="w-screen h-screen flex flex-col items-center justify-center gap-3 bg-orange-100">
+    <p class="text-xl font-semibold font-mono">Hey, <%= current_user.name %> </p>
+    <p class="text-md font-medium"> <span class="font-semibold"><%= @user.name%></span> has invited you to join <span class="font-semibold"><%= @community.name %></span> community!</p>
+    <!-- if a user has a part of the community then get started else join option is present -->
+    <% if !@joined %>
+        <% if @community.isPrivate %>
+            <button id="requested-community" class="">
+                <%= link_to 'Request', request_to_join_community_path(@community),data: { controller: "dialog", action: "dialog#close" }, method: :get, class:"bg-orange-500 rounded-md px-5 py-1 w-fit h-fit text-white"%>
+            </button>
+            <p id="request-sent-txt" class="hidden text-md font-medium px-2 py-1 rounded-md bg-orange-500 text-white">Request Sent</p>
+        <% else %>
+            <%= link_to 'Join', join_community_path(@community),data: { controller: "dialog", action: "dialog#close" }, method: :get, class:"bg-orange-500 rounded-md px-5 py-1 w-fit h-fit text-white" %>
+        <% end %>
+    <% else %>
+        <p><b>You are already part of this community.</b></p>
+        <%= link_to 'Get Started', community_path(@community) %>
+    <% end %>
+</div>
+
+<script>
+
+    const RequestBtn = document.getElementById("requested-community")
+    const RequestSentTxt = document.getElementById("request-sent-txt")
+    RequestBtn.addEventListener("click", ()=>{
+        console.log("button clicked...")
+        RequestBtn.classList.add("hidden")
+        RequestSentTxt.classList.remove("hidden")
+    })
+
+</script>

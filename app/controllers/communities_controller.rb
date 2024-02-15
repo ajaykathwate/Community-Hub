@@ -14,7 +14,7 @@ class CommunitiesController < ApplicationController
       @video_post = VideoPost.new
       @video_posts = @e_learning_chat_room.video_posts.order(created_at: :desc)
     end
-    
+
     @current_user = current_user
 
     @message = Message.new
@@ -53,9 +53,7 @@ class CommunitiesController < ApplicationController
     @user_id = current_user.id
 
     # all messages of all communities a user is part of
-    @all_messages = Message.joins(chat_room: { community: :community_users })
-                      .where(community_users: { user_id: @user_id })
-                      .order('messages.created_at DESC')
+    @all_messages = Message.joins(chat_room: { community: :community_users }).where(community_users: { user_id: @user_id }).order('messages.created_at DESC')
 
     render 'index'
   end
