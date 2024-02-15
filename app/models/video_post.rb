@@ -1,5 +1,4 @@
 class VideoPost < ApplicationRecord
-  # after_create :notify_users
 
   has_one_attached :video_file
 
@@ -30,12 +29,5 @@ class VideoPost < ApplicationRecord
   end
 
   scope :containing, ->(query){where("title LIKE ?", "%#{query}%")}
-
-  # def notify_users
-  #   ActionCable.server.broadcast("notifications_channel", {
-  #       title: self.title,
-  #       body: self.body
-  #   })
-  # end
 
 end

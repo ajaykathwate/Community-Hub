@@ -31,6 +31,9 @@ class CommunitiesController < ApplicationController
 
     @matches = fetch_cricket_data
 
+    # notificatios
+
+
     render 'index'
   end
 

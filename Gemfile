@@ -86,3 +86,4 @@ gem 'maker'
 
 gem 'foreman'
 
+gem "noticed", "~> 2.1"

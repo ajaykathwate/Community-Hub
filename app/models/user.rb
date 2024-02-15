@@ -24,8 +24,6 @@ class User < ApplicationRecord
 
   has_many :likes
 
-  has_many :notifications, dependent: :destroy
-
   belongs_to :admin, class_name: "Community", foreign_key: "admin_id", optional: true
 
   scope :all_except, -> (user) {where.not(id: user)}

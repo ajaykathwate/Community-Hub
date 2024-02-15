@@ -52,9 +52,6 @@ Rails.application.routes.draw do
 
   resources :sports_chat_rooms
 
-  resources :notifications, only: [:create]
-
-
   post '/create_new_notification', to:"notifications#new", as:'create_new_notification'
 
 end
