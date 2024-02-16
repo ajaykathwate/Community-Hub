@@ -32,7 +32,10 @@ class CommunitiesController < ApplicationController
     @matches = fetch_cricket_data
 
     # notificatios
-
+    if current_user
+      current_user.notifications.mark_as_read
+      @notifications = current_user.notifications.reverse
+    end
 
     render 'index'
   end

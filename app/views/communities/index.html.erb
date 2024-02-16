@@ -1,7 +1,7 @@
 <div class="min-w-full max-w-screen flex flex-col relative">
+     
     
-    
-    <div class="navbar flex flex-row items-center justify-between bg-slate-800 py-2 px-4">
+    <div class="navbar flex flex-row items-center justify-between bg-slate-800 py-2 px-4 relative">
         <!-- Explore Tab icon bar -->
         <%= link_to explore_path  do %>
                 <div class="flex flex-row items-center justify-center gap-2 bg-white shadow-md px-4 py-1 rounded-full">
@@ -28,32 +28,23 @@
         </div>
 
         <!-- Notifications icon -->
-        <button id="btn-open-notifications">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 bg-white p-1 rounded-full cursor-pointer transform hover:scale-125 transition duration-500 ease-in-out ">
+        <button id="btn-open-notifications" class="relative notifications-count cursor-pointer transform hover:scale-105 transition duration-500 ease-in-out ">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 bg-white p-1 rounded-full">
                 <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z" clip-rule="evenodd" />
             </svg>
+            <p class="count-number px-1 rounded-full w-fit h-fit text-sm font-medium bg-blue-500"><%= @notifications.count %></p>
         </button>
-
         <!-- notifications -->
-        
+        <div id="notifications-div" class=" hidden notifications-div w-fit h-screen max-h-screen overflow-y-auto hide-scrollbar bg-white z-50 p-2 rounded-md">
+            <!-- notifications -->
+            <%= turbo_frame_tag "notifications" do %>
+                <%= render "comment_notifier/notifications/notifications", user: current_user %>
+            <% end %>
+        </div>
         
     </div>
     <!-- Main section of app -->
     <section class="bg-[#dee4f6] min-w-screen flex-1  w-full min-h-screen flex justify-between items-center flex-row">
-        <!-- notifications list -->
-        <div id="notifications-div" class=" hidden absolute right-0 top-0 bg-white flex flex-col items-center justify-start gap-2">
-            <div class="flex flex-row items-center justify-between">
-                <p class="text-md font-semibold flex flex-col">Notifications</p>
-                <button id="btn-close-notifications">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                        <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                    </svg>
-                </button>
-            </div>
-            <div  class="w-fit h-fit flex flex-col text-black">
-                Notifications list
-            </div>
-        </div>
 
         <!-- This is a aside section for listing communities -->
         <section class="bg-white rounded-lg flex flex-col items-center justify-between flex-wrap max-h-screen h-fit max-w-fit min-w-10 w-fit mx-2 b-1  px-2 shadow-lg">
@@ -313,7 +304,5 @@
         console.log("notification close button clicked....")
         notificationsDiv.classList.add("hidden")
     })
-    
-    const openNotificationBtn = document.getElementById("btn-chatRoom")
 
 </script>
