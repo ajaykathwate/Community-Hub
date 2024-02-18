@@ -11,15 +11,15 @@
     <%= turbo_stream_from "notifications_#{user.id}" %>
     <%= turbo_frame_tag "notifications_#{user.id}" do %>
       <% @notifications.each do |notification| %>
-        <%= render notification,
-          user: notification.event.creator,
-          video_post: notification.event.video_post,
-          unread: notification.unread? %>
+        <% if notification.type == "CommentNotifier::Notification" %>
+          <%= render notification,
+            user: notification.event.creator,
+            video_post: notification.event.video_post,
+            unread: notification.unread? %>
+        <% elsif notification.type == "LikeNotifier::Notification" %>
+          <p class="text-sm font-normal px-4 py-2 rounded-md notification-single"><%= notification.params[:message] %> </p>
+        <% end %>
       <% end %>
     <% end %>
   </div>
 <% end %>
-
-<script>
-  const closeNotificationsBtn = document.getElementById("btn-close-notifications")
-</script>

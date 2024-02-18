@@ -21,6 +21,11 @@ class Message < ApplicationRecord
 
   def like(user)
     likes.where(user: user).first_or_create
+    LikeNotifier.with(message: "#{user.name} liked your video post").deliver_later(self.user)
+    broadcast_prepend_to "notifications_#{self.user.id}",
+      target: "notifications_#{self.user.id}",
+      partial: "comment_notifier/notifications/message_like_notification",
+      locals: {user:self.user, unread: true }
   end
 
   def unlike(user)

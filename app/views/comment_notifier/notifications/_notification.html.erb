@@ -1,23 +1,6 @@
 <div class="w-full h-fit text-black flex items-center justify-between flex-row gap-2 px-4 py-2 notification-single rounded-md">
-  <!-- user profile -->
-  <% if user.profile_image.attached?%>
-    <%= link_to user, class: "block" do %>
-        <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
-    <% end %>
-  <% else %>
-    <%= link_to user, class: "block" do %>
-        <% result = user.name.split.map(&:first).join.upcase %>
-        <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
-            <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
-        </div>
-    <% end %>
-  <% end %>
   <!-- username -->
-  <p class="text-sm font-normal"><%= user.username %> commented on </P>
-  <!-- video_post link -->
-  <%= link_to e_learning_chat_room_video_post_path(video_post.e_learning_chat_room_id, video_post), class: "block w-8 h-8 rounded-full" do %>
-    <%= video_tag(video_post.video_file, controls: false, preload: false, muted:true, class:"w-8 h-8 rounded-md") %>
-  <% end %>
+  <p class="text-sm font-normal"><%= user.username %> commented on your post </P>
   <!-- if the notification is unread -->
   <% if unread %>
     <p class="px-1 unread-p rounded-full text-sm ">Unread</p>

@@ -11,7 +11,7 @@ class CommentsController < ApplicationController
     @comment.user = current_user
 
     if @comment.save
-      turbo_stream.append :comments, partial: 'comments/comment', locals: { comment: @comment, video_post: @video_post }
+      turbo_stream.prepend :comments, partial: 'comments/comment', locals: { comment: @comment, video_post: @video_post }
     else
       render :new
     end

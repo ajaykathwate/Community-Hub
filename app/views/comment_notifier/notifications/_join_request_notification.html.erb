@@ -1,0 +1,7 @@
+<div class="flex items-center justify-start flex-row gap-2 px-4 py-2 rounded-md">
+    <p class="text-sm font-medium px-4 pt-2 notification-single"><%= user.name %> requested to join the community</p>
+    <!-- if the notification is unread -->
+    <% if unread %>
+        <p class="px-1 unread-p rounded-full text-sm ">Unread</p>
+    <% end %>
+</div>

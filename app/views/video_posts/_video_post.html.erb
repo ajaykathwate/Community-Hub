@@ -42,8 +42,10 @@
         <div id="comments-div" class="bg-white hidden rounded-md max-h-[20em] overflow-y-auto custom-scrollbar">
             <%= turbo_stream_from video_post %>
             <div id="comments" class="flex flex-col gap-2">
-                <% @comments = video_post.comments %>
-                <%= render @comments %>
+                <% @comments = video_post.comments.reverse %>
+                <% @comments.each do |comment|%>
+                    <%= render comment %>
+                <% end %>
             </div>
         </div>
     </div>
