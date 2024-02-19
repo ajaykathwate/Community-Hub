@@ -13,13 +13,19 @@
           </ul>
         </div>
     <% end %>
-    <div class="flex flex-col items-start justify-center gap-2">
+    <div data-controller="previews" class="flex flex-col items-start justify-center gap-2">
 
         <%= form.text_field :title, placeholder:"Post title", class:"border-0.5 border-slate-500 rounded-md " %>
 
         <%= form.text_field :tags, value: @video_post.tags.map(&:name).join(","), placeholder:"Tags", class:"border border-slate-500 rounded-md" %>
         
-        <%= form.file_field :video_file, accept: "video/*" %>
+        <%= form.file_field :video_file, accept: "video/*", data: { previews_target: "input", action: "change->previews#preview" } %>
+
+        <% if @video_post.video_file.attached? %>
+            <%= video_tag(@video_post.video_file,data: { previews_target: "preview" } , controls: false, preload: false, muted:true, class:"w-20 h-20 rounded-md") %>
+        <% else %>
+            <%= video_tag("", data: { previews_target: "preview" } , controls: false, preload: false, muted:true, class:"w-20 h-20 rounded-md") %>
+        <% end %>
 
         <div class="w-full rounded-full text-md font-medium bg-[#0775ff] py-1 justify-center items-center flex cursor-pointer">
             <%= form.submit "Submit", data: { disable_with: false }, class:"text-white cursor-pointer"%>

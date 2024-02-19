@@ -1,9 +1,9 @@
 <%= form_with(model: [ELearningChatRoom.find(video_post.e_learning_chat_room_id), video_post, Comment.new], url: e_learning_chat_room_video_post_comments_path(ELearningChatRoom.find(video_post.e_learning_chat_room_id), video_post),  remote: true, data:{controller: 'reset-form', action:'turbo:submit-end->reset-form#reset'}) do |form| %>
     <div class="flex flex-row  justify-between bg-blue-300 w-full rounded-full p-1">
-        <% if current_user.profile_image.attached?%>
-            <%= image_tag(current_user.profile_image, class: "w-8 h-8 rounded-full") %>
+        <% if video_post.user.profile_image.attached?%>
+            <%= image_tag(video_post.user.profile_image, class: "w-8 h-8 rounded-full") %>
         <% else %>
-            <% result = current_user.name.split.map(&:first).join.upcase %>
+            <% result = video_post.user.name.split.map(&:first).join.upcase %>
             <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
             <div class="w-8 h-8 bg-amber-400 border-none rounded-full flex items-center justify-center" id="btn" aria-describedby="tooltip" >
                 <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>

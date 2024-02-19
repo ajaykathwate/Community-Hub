@@ -8,12 +8,14 @@ export default class extends Controller {
   }
 
   preview() {
+    console.log("called..");
     let input = this.inputTarget;
     let preview = this.previewTarget;
     let file = input.files[0];
     let reader = new FileReader();
 
     reader.onloadend = function () {
+      preview.classList.remove("hidden");
       preview.src = reader.result;
     };
 
@@ -21,6 +23,7 @@ export default class extends Controller {
       reader.readAsDataURL(file);
     } else {
       preview.src = "";
+      preview.classList.add("hidden");
     }
   }
 }

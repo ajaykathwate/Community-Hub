@@ -13,9 +13,14 @@ class VideoPostsController < ApplicationController
     @video_post = @e_learning_chat_room.video_posts.build(post_params.except(:tags))
     @video_post.user = current_user
     create_or_delete_video_posts_tags(@video_post, params[:video_post][:tags])
+    @user = current_user
 
     if @video_post.save
-      render turbo_stream: turbo_stream.append(:video_posts, partial: 'video_posts/video_post', locals: { video_post: @video_post })
+      # debugger
+      puts "*****************************"
+      puts "Current User: #{current_user}"
+      puts "*****************************"
+      render turbo_stream: turbo_stream.prepend(:video_posts, partial: 'video_posts/video_post', locals:{ video_post: @video_post, current_user: @user })
       puts "Post saved....................."
     else
       render :new, notice:"Post not created successfully, try again!"
