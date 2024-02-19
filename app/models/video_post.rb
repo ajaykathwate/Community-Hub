@@ -12,7 +12,7 @@ class VideoPost < ApplicationRecord
 
   after_create_commit {broadcast_append_to self.e_learning_chat_room}
 
-  validates :title, :video_file, presence: true
+  validates :title, :video_file, :tags, presence: true
 
   has_many :likes, as: :record
 

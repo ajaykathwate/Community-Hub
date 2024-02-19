@@ -111,3 +111,10 @@
   background-color: #0000ff;
   color: #FFF;
 }
+
+.new-video-post-btn-rorate-first{
+  transform: rotate(45deg);
+}
+.new-video-post-btn-rorate-second{
+  transform: rotate(270deg);
+}

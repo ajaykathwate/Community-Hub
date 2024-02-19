@@ -29,7 +29,7 @@ class CommunitiesController < ApplicationController
 
     @pending_requests = @single_community.join_requests.where(accepted: false)
 
-    @matches = fetch_cricket_data
+    # @matches = fetch_cricket_data
 
     # notificatios
     if current_user

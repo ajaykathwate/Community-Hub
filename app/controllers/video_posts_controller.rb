@@ -15,9 +15,10 @@ class VideoPostsController < ApplicationController
     create_or_delete_video_posts_tags(@video_post, params[:video_post][:tags])
 
     if @video_post.save
-      turbo_stream.append :video_posts, partial: 'video_posts/video_post', locals: { video_post: @video_post }, notice:"Post Created Successfully!"
+      render turbo_stream: turbo_stream.append(:video_posts, partial: 'video_posts/video_post', locals: { video_post: @video_post })
+      puts "Post saved....................."
     else
-      render :new, notice:"Error occured while creating community, Try again!"
+      render :new, notice:"Post not created successfully, try again!"
     end
   end
 

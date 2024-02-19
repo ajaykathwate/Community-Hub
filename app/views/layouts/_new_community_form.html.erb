@@ -20,30 +20,9 @@
                 <div class="flex items-center justify-start">
                     <p class="text-start text-sm font-semibold text-[#a6a8aa] py-1">Select Topic</p>
                 </div>
-
-
-                <div class="field">
-    <%= form.label :location %>
-    <%= form.select :location, ["Mumbai", "Pune", "Other"], {}, { id: "user_location" } %>
-  </div>
-
-  <div class="field custom-location" style="display: none;">
-    <%= form.label :custom_location %>
-    <%= form.text_field :custom_location %>
-  </div>
-                
-                <div class="flex- flex-row">
-                    <div class=" text-black flex justify-start gap-2">
-                        <div class="inline-flex items-center">
-                          <%= form.radio_button :topic, 'E-Learning',id:"topic", class: 'form-radio h-4 w-4 text-indigo-600' %>
-                          <%= form.label :topic_eLearning, "E-Learning", class:"ml-1 text-sm text-gray-950"%>
-                        </div>
-                        <div class="inline-flex items-center">
-                          <%= form.radio_button :topic, 'Sports', id:"topic", class: 'form-radio h-4 w-4 text-indigo-600' %>
-                          <%= form.label :topic_sports, "Sports", class:"ml-1 text-sm text-gray-950"%>
-                        </div>
-                        <%= form.text_field :topic, class: 'form-input flex-1 flex w-full px-4 py-2 text-sm border-none rounded-md bg-[#f4f6fa] text-[#000]', id: 'community-topic-input',  placeholder: "Custom Topic" %>
-                    </div>
+                <div class="flex flex-col gap-2">
+                    <%= form.select :topic, options_for_select(['E-Learning', 'Sports', 'other']), {}, onchange: "checkColors(this.value)", class:"border-none rounded-md bg-[#f4f6fa]" %>
+                    <%= form.text_field :topic, id: 'topic', style: 'display:none;', class:"bg-[#f4f6fa] border-none rounded-md", placeholder:"Type custom topic" %>
                 </div>
             </div>
             <div class="w-full gap-2 flex flex-row justify-start items-center text-sm">
@@ -73,25 +52,17 @@
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function() {
-  const locationSelect = document.querySelector("#user_location");
-  const customLocationField = document.querySelector(".custom-location");
-
-  locationSelect.addEventListener("change", function() {
-    if (locationSelect.value === "Other") {
-      customLocationField.style.display = "block";
+  function checkColors(val) {
+    console.log("value: " + val)
+    var element = document.getElementById('topic');
+    if (val == 'other'){
+      element.style.display = 'block';
+      element.disabled = false;
     } else {
-      customLocationField.style.display = "none";
+      element.style.display = 'none';
+      element.disabled = true;
+      console.log("other selected....")
     }
-  });
-
-  // Trigger the change event on page load if "Other" is pre-selected
-  if (locationSelect.value === "Other") {
-    customLocationField.style.display = "block";
   }
-});
-
-
-
 
 </script>

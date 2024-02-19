@@ -79,6 +79,7 @@
             <% end %>
         </div>
 
+        <!-- share button -->
         <div
             id="<%= dom_id @single_community %>" 
             data-controller="share"
@@ -100,13 +101,19 @@
                     <!-- post -->
                     <%= turbo_stream_from @e_learning_chat_room %>
                     <div id="video_posts" class="gap-5">
-                        <%= render @video_posts, community_admin: @community_admin %>
+                        <%= render @video_posts, community_admin: @community_admin, current_user: current_user %>
                     </div>
                 </div>
-                <div class="video-footer flex items-center justify-center mb-1">
-                    <div class="bg-[#2a6fff] rounded-full flex flex-row gap-2 px-2 py-1 cursor-pointer transform hover:scale-105 transition duration-200 ease-in-out">
+                <div class="video-footer w-full flex items-center justify-center  flex-col gap-2">
+                    <div id="div-new-video-form" class="hidden bg-white p-4 rounded-md flex flex-col items-center justify-start gap-2">
+                        <p class="text-center text-xl font-semibold">New Post</p>
                         <%= render "layouts/new_video_post_form" %>
                     </div>
+                    <button id="btn-open-new-post-form" class="cursor-pointer transform hover:scale-105 transition duration-200 ease-in-out">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-12 h-12 rounded-full">
+                          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
                 </div>
             </div>
             <!-- END: show e-learning chat_room -->
@@ -122,13 +129,17 @@
     <div id="chatRoom-div" class=" flex flex-col flex-1 ">
         <div  class=" flex flex-1 flex-col bg-[#f4f6fa] rounded-md my-2 p-2 w-full max-h-[33em] overflow-y-auto custom-scrollbar" >
             
+            <!-- chatroom : render a _message_form partial here -->
+            
+
             <div id="messages" data-controller="scroll">
                 <% @messages.each do |message|%>
                     <%= render 'messages/message', message: message %>
                 <% end %>
             </div>
+
         </div>
-        <%= render 'layouts/new_message_form' %>    
+        <%= render 'layouts/new_message_form' %>
     </div>
     <!-- END: show chat_room -->
  
@@ -246,6 +257,19 @@
     const chatDiv = document.getElementById("chatRoom-div")
     const eLearningDiv = document.getElementById("eLearning-div")
     const sportsDiv = document.getElementById("sports-div")
+    const newVideoFormDiv = document.getElementById("div-new-video-form")
+    
+    const openNewVideoFormButton = document.getElementById("btn-open-new-post-form")
+    openNewVideoFormButton.addEventListener("click",()=>{
+        console.log("openNewVideoFormButton button clicked....")
+        if(newVideoFormDiv.classList.contains('hidden')){
+            newVideoFormDiv.classList.remove("hidden")
+            openNewVideoFormButton.classList.add("new-video-post-btn-rorate-first");
+        }else{
+            newVideoFormDiv.classList.add('hidden')
+            openNewVideoFormButton.classList.add("new-video-post-btn-rorate-second");
+        }
+    })
 
     const chatButton = document.getElementById("btn-chatRoom")
     chatButton.addEventListener("click",()=>{
@@ -261,6 +285,7 @@
         eLearningDiv.classList.remove("hidden")
         sportsDiv.classList.add("hidden")
     })
+
     const sportsButton = document.getElementById("btn-sports")
     sportsButton.addEventListener("click",()=>{
         console.log("sports button clicked....")

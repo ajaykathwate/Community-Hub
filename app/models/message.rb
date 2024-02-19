@@ -1,14 +1,13 @@
 class Message < ApplicationRecord
 
-  searchkick text_middle: %i[content]
-
   belongs_to :chat_room
   belongs_to :user
 
   has_one_attached :post_image
   has_one_attached :file_upload
 
-  # after_create_commit {broadcast_append_to self.chat_room}
+  after_create_commit {broadcast_append_to self.chat_room}
+
   validates :content, presence: true
 
   has_many :likes, as: :record

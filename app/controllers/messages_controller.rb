@@ -9,11 +9,18 @@ class MessagesController < ApplicationController
     @message = @single_chatroom.messages.build(msg_params)
     @message.user = current_user
 
+    # if @message.save
+    #   puts "Message saved to DB...!"
+    #   turbo_stream.append :messages, partial: 'messages/message', locals: { message: @message }
+    # else
+    #   # validation errors
+    # end
+
     @message.save
-      puts "saved message...."
-      # html = render(partial: 'messages/message', locals: { message: @message })
-      # ActionCable.server.broadcast("room_channel_#{@message.chat_room_id}", {html: html})
-      # SendMessageJob.perform_later(@message)
+    #   puts "saved message...."
+    #   # html = render(partial: 'messages/message', locals: { message: @message })
+    #   # ActionCable.server.broadcast("room_channel_#{@message.chat_room_id}", {html: html})
+    #   # SendMessageJob.perform_later(@message)
       html = ApplicationController.render(
         partial: "messages/message",
         locals:{message: @message}
