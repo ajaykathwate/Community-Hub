@@ -118,3 +118,14 @@
 .new-video-post-btn-rorate-second{
   transform: rotate(270deg);
 }
+
+.video-posts-area{
+  max-height: 36.5em;
+}
+
+.search-results-div{
+  width: 50em;
+  max-width: 50em;
+  height: fit-content;
+  max-height: 37em;
+}

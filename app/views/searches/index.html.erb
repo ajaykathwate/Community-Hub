@@ -1,5 +1,5 @@
-<turbo-frame id="search_results">
-  <div class="w-full h-fit bg-white rounded-md flex flex-col items-center justify-center">
+<turbo-frame id="search_results" class="">
+  <div class=" search-results-div overflow-y-auto custom-scrollbar bg-white rounded-md flex flex-col items-center justify-center">
     <% if @video_posts %>
       <div class="w-full h-fit flex flex-col gap-2">
         <% if @video_posts.count > 0 %>
