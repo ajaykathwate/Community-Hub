@@ -25,7 +25,9 @@ Rails.application.routes.draw do
 
   resource :user_sessions, only: [:new, :create, :destroy]
 
-  resources :users
+  resources :users do
+    resource :interest
+  end
 
   resources :communities
 
@@ -49,6 +51,9 @@ Rails.application.routes.draw do
       resource :like, module: :video_posts
     end
   end
+
+  # resources :interests
+  get 'users/:id/user_interests', to: 'users#user_interests', as: 'user_interests'
 
   resources :sports_chat_rooms
 

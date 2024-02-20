@@ -3,7 +3,7 @@ class UserSessionsController < ApplicationController
   def new
     @user = User.new
   end
- 
+
   def create
     @user = User.find_by(email: params[:user][:email])
     if @user && @user.authenticate(params[:user][:password])
@@ -13,7 +13,11 @@ class UserSessionsController < ApplicationController
         session[:fall_back_url] = nil
         redirect_to @url
       else
-        redirect_to root_path
+        if @user.interests.count <= 3
+          redirect_to user_interests_path
+        else
+          redirect_to root_path
+        end
       end
     else
       redirect_to new_user_sessions_path

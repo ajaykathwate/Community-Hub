@@ -7,3 +7,6 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+interests = ['Music','Gaming', "Sports", 'Business', 'Crypto', 'Television', 'Celebrity', 'Animals and Pets', 'Art', 'Cars and Motor Vehicles', "Fashion", 'Food and Drink', 'History', 'Hobbies', 'Law', 'Learning and Education', 'Military', 'Movies', 'Place', 'Podcasts and Streaming', 'Politics', 'Programming', 'Reading and Writing', 'Spiritual', 'Science', 'Techology', 'Travel', 'Cricket', 'Health', 'Gym', 'Cooking']
+interests.each { |interest| Interest.create(name: interest) }

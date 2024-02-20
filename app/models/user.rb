@@ -16,6 +16,12 @@ class User < ApplicationRecord
   has_many :join_requests, dependent: :destroy
   has_many :requested_communities, through: :join_requests, source: :community, dependent: :destroy
 
+  has_many :user_interests, dependent: :destroy
+  has_many :interests, through: :user_interests, dependent: :destroy
+
+  # check that a user selects at least three interests and maximum five
+  validates :interests, length: { minimum: 3, maximum: 5, message: 'must select at least three interests' }
+
   has_many :messages, dependent: :destroy
 
   has_many :video_posts, dependent: :destroy
@@ -23,12 +29,24 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
 
   has_many :likes
-  
+
   has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
 
   belongs_to :admin, class_name: "Community", foreign_key: "admin_id", optional: true
 
   scope :all_except, -> (user) {where.not(id: user)}
   scope :containing, ->(query){where("name LIKE ?", "%#{query}%")}
+
+  def has_interest?(interest)
+    interests.where(name: interest).any?
+  end
+
+  def add_interest(interest)
+    interests << interest
+  end
+
+  def remove_interest(interest)
+    interests.delete(interest)
+  end
 
 end

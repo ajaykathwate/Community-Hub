@@ -1,6 +1,6 @@
 class Messages::LikesController < ApplicationController
   include ActionView::RecordIdentifier
-
+  
   before_action :set_message
 
   def update

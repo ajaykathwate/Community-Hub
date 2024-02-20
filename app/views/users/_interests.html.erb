@@ -1,0 +1,11 @@
+<%= tag.div id: dom_id(user, :interests) do %>
+    <% if user.has_interest?(interest.name) %>
+        <%= button_to user_interest_path(user_id: user.id, interest_id: interest.id), method: :patch, class: "block" do %>
+            <p class="bg-slate-800 text-white px-2 py-1 rounded-md "><%= interest.name %></p>
+        <% end %>
+    <% else %>
+        <%= button_to user_interest_path(user_id: user.id, interest_id: interest.id), method: :patch, class: "block" do %>
+            <p class="bg-orange-500 text-white px-2 py-1 rounded-md "><%= interest.name %></p>
+        <% end %>
+    <% end %>
+<% end %>
