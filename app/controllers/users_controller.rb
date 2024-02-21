@@ -47,7 +47,7 @@ class UsersController < ApplicationController
   def user_interests
     @user = User.find(params[:id])
     @user_interests = @user.interests
-    @interests = Interest.all
+    @interests = Interest.all.order('name ASC')
   end
 
 

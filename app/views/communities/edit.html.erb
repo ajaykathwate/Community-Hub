@@ -3,7 +3,9 @@
         <div class="my-2 flex flex-row items-center justify-between gap-5">
             <p class="flex-1 w-full text-start text-black text-xl font-semibold">Edit Community </p>
             <button data-action="dialog#close" class=" cursor-pointer">
-                <img src="https://cdn-icons-png.flaticon.com/128/11823/11823292.png" class="w-6 h-6"/>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
             </button>
         </div>
         <%= render "layouts/new_community_form", community: @community%>

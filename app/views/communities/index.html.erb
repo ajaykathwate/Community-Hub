@@ -28,7 +28,7 @@
         </div>
 
         <!-- Notifications icon -->
-        <button id="btn-open-notifications" class="relative notifications-count cursor-pointer transform hover:scale-105 transition duration-500 ease-in-out ">
+        <button id="btn-open-notifications" class="relative notifications-count cursor-pointer transform hover:scale-105 transition duration-500 ease-in-out">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 bg-white p-1 rounded-full">
                 <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z" clip-rule="evenodd" />
             </svg>
@@ -74,7 +74,7 @@
                                         </div>
                                     <% end %>
                                 </div>
-                                <!-- Name and username -->
+                                <!-- Name, username and other details... -->
                                 <div class="min-w-60 max-w-72 flex-wrap rounded-md flex flex-col flex-1 items-start justify-center bg-gray-700 px-4 py-1 ">
                                     <p class="text-start flex flex-1 text-lg font-semibold text-gray-200"><%= current_user.name %></p>
                                     <P class="text-start text-sm font-medium"><%= current_user.username %></P>
@@ -115,8 +115,21 @@
                                         <% end %>
                                     </div>
                                 <% end %>
+                                <div class="flex flex-col items-start justify-start gap-2 rounded-md bg-gray-600 w-fit max-w-72 px-4 py-1">
+                                    <p class="text-center font-semibold text-md">Interests</p>
+                                    <div class="flex flex-row">
+                                        <div class="flex flex-row flex-wrap gap-2 explore-users-interests">
+                                            <% current_user.interests.each do |interest|%>
+                                                <div class="flex flex-col items-center justify-center gap-1">
+                                                    <p class="w-28 break-words text-wrap bg-blue-200 text-black text-xs text-center font-normal px-2 py-1 rounded-md"><%= interest.name %></p>
+                                                </div>
+                                            <% end %>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="w-full flex flex-1 flex-col items-center justify-center gap-2">
-                                    <%= link_to 'Edit', edit_user_path(current_user), data: {turbo_frame: :modal, action: "click -> dialog#open"}, class:"w-full text-sm text-center font-semibold bg-gray-300 text-gray-600 px-2 py-1 rounded-md hover:text-md" %>
+                                    <%= link_to 'Edit Interests', user_interests_path(id: current_user.id), class:"w-full text-sm text-center font-semibold bg-gray-300 text-gray-600 px-2 py-1 rounded-md hover:text-md" %>
+                                    <%= link_to 'Edit Profile', edit_user_path(current_user), data: {turbo_frame: :modal, action: "click -> dialog#open"}, class:"w-full text-sm text-center font-semibold bg-gray-300 text-gray-600 px-2 py-1 rounded-md hover:text-md" %>
                                     <%= link_to 'Logout', logout_path, data: { confirm: 'Are you sure?', turbo_method: :delete }, class:"w-full text-sm font-semibold bg-orange-500 text-center px-2 py-1 rounded-md" %>
                                 </div>
                             </div>
@@ -184,7 +197,20 @@
                                         <% end %>
                                     </div>
                                 <% end %>
+                                <div class="flex flex-col items-start justify-start gap-2 rounded-md bg-gray-600 w-fit max-w-72 px-4 py-1">
+                                    <p class="text-center font-semibold text-md">Interests</p>
+                                    <div class="flex flex-row">
+                                        <div class="flex flex-row flex-wrap gap-2 explore-users-interests">
+                                            <% current_user.interests.each do |interest|%>
+                                                <div class="flex flex-col items-center justify-center gap-1">
+                                                    <p class="w-28 break-words text-wrap bg-blue-200 text-black text-xs text-center font-normal px-2 py-1 rounded-md"><%= interest.name %></p>
+                                                </div>
+                                            <% end %>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="w-full flex flex-1 flex-col items-center justify-center gap-2">
+                                    <%= link_to 'Edit Interests', user_interests_path(id: current_user.id), class:"w-full text-sm text-center font-semibold bg-gray-300 text-gray-600 px-2 py-1 rounded-md hover:text-md" %>
                                     <%= link_to 'Edit', edit_user_path(current_user), data: {turbo_frame: :modal, action: "click -> dialog#open"}, class:"w-full text-sm text-center font-semibold bg-gray-300 text-gray-600 px-2 py-1 rounded-md hover:text-md" %>
                                     <%= link_to 'Logout', logout_path, data: { confirm: 'Are you sure?', turbo_method: :delete }, class:"w-full text-sm font-semibold bg-orange-500 text-center px-2 py-1 rounded-md" %>
                                 </div>

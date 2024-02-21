@@ -1,9 +1,18 @@
-<div class="fle flex-col">
-    <p><b>All Interests</b></p>
-    <div class="w-screen max-w-screen flex-wrap flex flex-row items-center gap-2">
-        <% @interests.each do |interest|%>
-            <%= render 'users/interests',interest: interest, user: @user %>
-        <% end %>
-        <%= link_to 'Next ->', app_path %>
+<div class="interests-main-div flex items-center justify-center w-screen h-screen max-h-screen bg-blue-500">
+
+    <div class="w-fit h-fit interests-container flex flex-col items-center justify-center gap-5 p-5 bg-white rounded-md">
+        <div class="flex items-center justify-center flex-col gap-1">
+            <p class="text-center text-2xl font-semibold font-mono text-gray-500">Choose your interests</p>
+            <p class="text-sm font-light text-gray-500 font-mono">(Select atleast three interests to proceed)</p>
+        </div>
+        <div class="interests-div flex-wrap flex flex-row items-center justify-center gap-2 max-h-[33.5em] overflow-y-auto hide-scrollbar">
+            <% @interests.each do |interest|%>
+                <%= render 'users/interests',interest: interest, user: @user %>
+            <% end %>
+        </div>
+        <div class="flex flex-row items-center justify-center gap-2">
+            <%= link_to "<- Back", :back, class:"text-md text-center text-gray-800 font-semibold px-4 py-1 rounded-full bg-blue-200" %>
+            <%= render 'users/next', interests: @user.interests, user: @user %>
+        </div>
     </div>
 </div>

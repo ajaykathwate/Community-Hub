@@ -1,5 +1,9 @@
 class MessagesController < ApplicationController
 
+  # allow only authenticated user to access these pages and those who has atleast three interests
+  before_action :authenticate_user
+  before_action :has_three_interests
+
   def new
     @message = Message.new
   end
@@ -45,5 +49,25 @@ class MessagesController < ApplicationController
     params.require(:message).permit(:content, :user_id, :likes, :post_image, :file_upload)
   end
 
+  # cloudinary setup
+  # def upload_avatar(avatar_file)
+  #   self.avatar = Cloudinary::Uploader.upload(avatar_file, resource_type: :image)['url']
+  # end
+  # # <%= image_tag @user.avatar if @user.avatar.present? %>
+  # @user.upload_avatar(params[:user][:avatar]) if params[:user][:avatar].present?
+
+  # check if the user is authenticated
+  def authenticate_user
+    if !current_user
+      redirect_to new_user_sessions_path
+    end
+  end
+
+  # has more than three interests selected after signup
+  def has_three_interests
+    if current_user.interests.count < 3
+      redirect_to user_interests_path(id: current_user.id)
+    end
+  end
 
 end

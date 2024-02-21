@@ -1,5 +1,9 @@
 class VideoPostsController < ApplicationController
 
+  # allow only authenticated user to access these pages and those who has atleast three interests
+  before_action :authenticate_user
+  before_action :has_three_interests
+
   def new
     @e_learning_chat_room = ELearningChatRoom.new
   end
@@ -49,6 +53,20 @@ class VideoPostsController < ApplicationController
       redirect_to app_path, notice:"Video Post deleted successfully!"
     else
       redirect_to :back
+    end
+  end
+
+  # check if the user is authenticated
+  def authenticate_user
+    if !current_user
+      redirect_to new_user_sessions_path
+    end
+  end
+
+  # has more than three interests selected after signup
+  def has_three_interests
+    if current_user.interests.count < 3
+      redirect_to user_interests_path(id: current_user.id)
     end
   end
 

@@ -33,7 +33,10 @@
             <turbo-frame id="search_results_for_explore_page" target="_top"></turbo-frame>
         </div>
         <!-- Showing results -->
-        <div class="h-fit w-fit flex flex-col justify-center gap-2 p-2">
+        <div class="h-fit w-fit flex flex-row justify-center gap-5 p-2">
+            <div class="flex flex-col items-center justify-center">
+
+            
             <% @shuffled_records.each do |record| %>
                 <% if record.is_a?(VideoPost) %>
                     <% c = Community.find(ELearningChatRoom.find(record.e_learning_chat_room_id).community_id)%>
@@ -129,6 +132,47 @@
                     <% end %>
                 <% end %>
             <% end %>
+
+            </div>
+
+            <div class="h-fit p-4 gap-2 flex items-center justify-start flex-col rounded-md bg-gray-300">
+                <p class="text-center text-xl font-semibold font-mono w-full h-fit bg-white px-2 py-1 rounded-md ">Users</p>
+                <div class="flex flex-col items-center justify-start gap-2 bg-white px-2 py-2 rounded-md explore-users-interests-area overflow-y-auto hide-scrollbar">
+                    <% @users_with_same_interests.each do |user|%>
+                        <div class="flex flex-col justify-start gap-2">
+                            <div class="flex flex-row justify-start items-center gap-2">
+                                <% if user.profile_image.attached?%>
+                                    <%= link_to user, class: "block" do %>
+                                        <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
+                                    <% end %>
+                                <% else %>
+                                    <%= link_to user, class: "block" do %>
+                                        <% result = user.name.split.map(&:first).join.upcase %>
+                                        <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                                            <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                                        </div>
+                                    <% end %>
+                                <% end %>
+                                <p class="text-sm font-medium"><%= user.name %></p>
+                            </div>
+                            <div class="flex flex-row flex-wrap gap-2 explore-users-interests">
+                                <% user.interests.each do |interest|%>
+                                    <% if current_user.has_interest?(interest.name) %>
+                                        <div class="flex flex-col items-center justify-center gap-1">
+                                            <p class="w-28 break-words text-wrap bg-blue-300 text-gray-800 text-xs text-center font-semibold px-2 py-1 rounded-md"><%= interest.name %></p>
+                                        </div>
+                                    <% else %>
+                                        <div class="flex flex-col items-center justify-center gap-1">
+                                            <p class="w-28 break-words text-wrap bg-blue-200 text-gray-800 text-xs text-center font-normal px-2 py-1 rounded-md"><%= interest.name %></p>
+                                        </div>
+                                    <% end %>
+                                <% end %>
+                            </div>
+                        </div>
+                        <hr class="w-full h-[0.5px] my-2 mx-auto border-0 rounded  bg-gray-300">
+                    <% end %>
+                </div>
+            </div>
 
         </div>
     </div>

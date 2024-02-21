@@ -1,4 +1,6 @@
 class InterestsController < ApplicationController
+  # allow only authenticated user to access these pages
+  before_action :authenticate_user
 
   before_action :set_interest
 
@@ -13,7 +15,7 @@ class InterestsController < ApplicationController
     respond_to do |format|
       format.turbo_stream {
         render turbo_stream: turbo_stream.replace("user_#{@user.id}_interest_#{@interest.id}", partial: 'users/interests', locals: { user: @user, interest: @interest })
-       }
+      }
     end
   end
 
@@ -21,6 +23,13 @@ class InterestsController < ApplicationController
   def set_interest
     @interest = Interest.find(params[:interest_id])
     @user = User.find(params[:user_id])
+  end
+
+  # check if the user is authenticated
+  def authenticate_user
+    if !current_user
+      redirect_to new_user_sessions_path
+    end
   end
 
 end
