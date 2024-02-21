@@ -1,0 +1,11 @@
+<%= render 'layouts/turbo_dialog' do %>
+    <div action="turbo:submit-end->turbo-modal#submitEnd" class="fixed z-1 p-6 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-auto bg-white w-fit h-fit rounded-2xl shadow-xl backdrop:bg-gray-200 backdrop:bg-opacity-60">
+        <div class="my-2 flex flex-row items-center justify-between gap-5">
+            <p class="flex-1 w-full text-start text-black text-xl font-semibold">Edit VideoPost </p>
+            <button data-action="dialog#close" class=" cursor-pointer">
+                <img src="https://cdn-icons-png.flaticon.com/128/11823/11823292.png" class="w-6 h-6"/>
+            </button>
+        </div>
+        <%= render "layouts/new_video_post_form", video_post: @video_post, e_learning_chat_room: @e_learning_chat_room %>
+    </div>
+<% end %>

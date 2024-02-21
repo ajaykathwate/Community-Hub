@@ -14,7 +14,7 @@ class UserSessionsController < ApplicationController
         redirect_to @url
       else
         if @user.interests.count <= 3
-          redirect_to user_interests_path
+          redirect_to user_interests_path(id: @user.id)
         else
           redirect_to root_path
         end

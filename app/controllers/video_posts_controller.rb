@@ -27,6 +27,21 @@ class VideoPostsController < ApplicationController
     end
   end
 
+  def edit
+    @e_learning_chat_room = ELearningChatRoom.find(params[:e_learning_chat_room_id])
+    @video_post = VideoPost.find(params[:id])
+  end
+
+  def update
+    @e_learning_chat_room = ELearningChatRoom.find(params[:e_learning_chat_room_id])
+    @video_post = VideoPost.find(params[:id])
+    if @video_post.update(post_params)
+      redirect_to app_path, notice: "VideoPost Updated Successfully!"
+    else
+      render edit_communities_path(@community)
+    end
+  end
+
   def delete_post
     @video_post = VideoPost.find(params[:id])
     if @video_post.destroy

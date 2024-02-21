@@ -87,3 +87,11 @@ gem 'maker'
 gem 'foreman'
 
 gem "noticed", "~> 2.1"
+
+gem 'cloudinary'
+
+# better errors
+group :development do
+  gem "better_errors"
+  gem "binding_of_caller"
+end

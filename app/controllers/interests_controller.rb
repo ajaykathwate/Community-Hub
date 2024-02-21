@@ -12,7 +12,7 @@ class InterestsController < ApplicationController
     end
     respond_to do |format|
       format.turbo_stream {
-        render turbo_stream: turbo_stream.replace(dom_id(@user, :interests), partial: 'users/interests', locals:{user: @user, interest: @interest})
+        render turbo_stream: turbo_stream.replace("user_#{@user.id}_interest_#{@interest.id}", partial: 'users/interests', locals: { user: @user, interest: @interest })
        }
     end
   end
