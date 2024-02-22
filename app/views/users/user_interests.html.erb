@@ -11,8 +11,8 @@
             <% end %>
         </div>
         <div class="flex flex-row items-center justify-center gap-2">
-            <%= link_to "<- Back", :back, class:"text-md text-center text-gray-800 font-semibold px-4 py-1 rounded-full bg-blue-200" %>
-            <%= render 'users/next', interests: @user.interests, user: @user %>
+            <%= render partial: 'users/next', locals: { count: current_user.interests.count } %>
         </div>
+
     </div>
 </div>

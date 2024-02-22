@@ -33,10 +33,12 @@
                             <td class="px-4 text-md font-medium text-black py-2 whitespace-nowrap">Email</td>
                             <td class="px-4 text-md font-normal text-black py-2 whitespace-nowrap"><%= user.email %></td>
                         </tr>
-                        <tr class="rounded-md hover:bg-orange-50 ">
-                            <td class="px-4 text-md font-medium text-black py-2 whitespace-nowrap">About</td>
-                            <td class="px-4 text-md font-normal text-black py-2 whitespace-nowrap"><%= user.about.length == 0?"No about present..." : user.about %></td>
-                        </tr>
+                        <% if user.about %>
+                            <tr class="rounded-md hover:bg-orange-50 ">
+                                <td class="px-4 text-md font-medium text-black py-2 whitespace-nowrap">About</td>
+                                <td class="px-4 text-md font-normal text-black py-2 whitespace-nowrap"><%= user.about.length == 0?"No about present..." : user.about %></td>
+                            </tr>
+                        <% end %>
                     </tbody>
                 </table>
             </div>

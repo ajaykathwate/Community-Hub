@@ -15,12 +15,14 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    # debugger
 
-    if @user.save
+    if @user.save!
       puts "User saved to Database!"
       redirect_to new_user_sessions_path
     else
       render :new
+      puts "Error.........."
     end
   end
 

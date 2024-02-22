@@ -14,7 +14,10 @@ class InterestsController < ApplicationController
     end
     respond_to do |format|
       format.turbo_stream {
-        render turbo_stream: turbo_stream.replace("user_#{@user.id}_interest_#{@interest.id}", partial: 'users/interests', locals: { user: @user, interest: @interest })
+        render turbo_stream: [
+          turbo_stream.replace("user_#{@user.id}_interest_#{@interest.id}", partial: 'users/interests', locals: { user: @user, interest: @interest }),
+          turbo_stream.replace("interests-count", partial: 'users/next', locals: { count: current_user.interests.count })
+        ]
       }
     end
   end

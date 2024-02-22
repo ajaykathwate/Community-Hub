@@ -1,3 +1,17 @@
-<%= tag.div id: "user_#{@user.id}" do %>
-    <%= link_to 'Next ->', app_path, class:"text-md text-center text-gray-800 font-semibold px-4 py-1 rounded-full bg-blue-200" %>
-<% end %>
+<div id="interests-count" class="flex flex-col gap-2 items-center justify-center">
+
+    <p class="text-md font-medium text-gray-500">Selected (<%= count %>)</p>
+    <% if count > 8 %>
+        <p class="text-md font-medium text-red-500">You can select maximum 8 interests!</p>
+    <% end %>
+
+    <% if count >= 3%>
+        <% if count <= 8 %>
+            <%= link_to 'Next ->', app_path, class:"text-md text-center text-gray-800 font-semibold px-4 py-1 rounded-full bg-blue-200" %>
+        <% else %>
+            <button type="button" disabled class="text-md text-center text-gray-500 font-semibold px-4 py-1 rounded-full bg-blue-200 opacity-10">Next -></button>
+        <% end %>
+    <% end %>
+
+</div>
+

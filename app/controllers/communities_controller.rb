@@ -13,7 +13,7 @@ class CommunitiesController < ApplicationController
     if @single_community.topic == 'E-Learning'
       @e_learning_chat_room = @single_community.e_learning_chat_room
       @video_post = VideoPost.new
-      @video_posts = @e_learning_chat_room.video_posts.order(created_at: :desc)
+      @video_posts = @e_learning_chat_room.video_posts.order(created_at: :desc).page(params[:page])
     end
 
     @current_user = current_user

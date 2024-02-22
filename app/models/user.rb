@@ -6,7 +6,8 @@ class User < ApplicationRecord
 
   # validations
   validates :name, presence: true, length: { minimum: 4, maximum: 255 }
-  validates :username, presence: true, uniqueness: true, length: { minimum:6, maximum: 50 }, format: { with: /\A[\w]+\z/, message: "can only contain letters, numbers, and underscores" }
+  validates :profile_image, presence: false
+  validates :username, presence: true, uniqueness: true, length: { minimum:6, maximum: 50 }
   validates :email, presence: true, uniqueness: true, length: { maximum: 255 }, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, presence: true, length: { minimum: 6 }
 
@@ -20,7 +21,7 @@ class User < ApplicationRecord
   has_many :interests, through: :user_interests, dependent: :destroy
 
   # check that a user selects at least three interests and maximum five
-  validates :interests, length: { minimum: 3, maximum: 5, message: 'must select at least three interests' }
+  # validates :interests, length: { minimum: 3, maximum: 5, message: 'must select at least three interests' }
 
   has_many :messages, dependent: :destroy
 
