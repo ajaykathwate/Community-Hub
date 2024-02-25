@@ -1,61 +1,66 @@
-<turbo-frame id="search_results" class="">
-  <div class=" search-results-div overflow-y-auto custom-scrollbar bg-white rounded-md flex flex-col items-center justify-center">
-    <% if @video_posts %>
-      <div class="w-full h-fit flex flex-col gap-2">
-        <% if @video_posts.count > 0 %>
-          <p class="bg-slate-500 rounded-md px-2 py-1 text-left text-2xl font-medium">Posts</p>
-        <% end %>
-        <% @video_posts.each do |video_post| %>
-          <%= link_to e_learning_chat_room_video_post_path(video_post.e_learning_chat_room_id, video_post), class: "flex items-center justify-start gap-2 px-2 py-1 flex-row video-search-results cursor-pointer", style: "text-decoration: none;" do %>
-              <%= video_tag(video_post.video_file, controls: false, preload: false, muted:true, class:"w-8 h-8 rounded-md") %>
-              <p class="text-md font-medium"><%= video_post.title %></p>
-          <% end %>
-        <% end %>
-      </div>
-    <% end %>
+  <turbo-frame id="search_results" class="">
 
-    <% if @users %>
-      <div class="w-full h-fit flex flex-col gap-2">
-          <% if @users.count > 0 %>
-            <p class="bg-slate-500 rounded-md px-2 py-1 text-left text-2xl font-medium">Users</p>
+
+    <div class=" search-results-div overflow-y-auto custom-scrollbar bg-white rounded-md flex flex-col items-center justify-center">
+
+      <% if @video_posts %>
+        <div class="w-full h-fit flex flex-col gap-2">
+          <% if @video_posts.count > 0 %>
+            <p class="bg-slate-500 rounded-md px-2 py-1 text-left text-2xl font-medium">Posts</p>
           <% end %>
-          <% @users.each do |user| %>
-            <%= link_to user, class: "block px-2 py-1 flex flex-row gap-2 items-center justify-start video-search-results cursor-pointer" do %>
-              <% if user.profile_image.attached?%>
-                <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
-              <% else %>
-                <% result = user.name.split.map(&:first).join.upcase %>
-                <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
-                <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
-                    <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
-                </div>
-              <% end %>
-              <p class="text-md font-medium"><%= user.name %></p>
+          <% @video_posts.each do |video_post| %>
+            <%= link_to e_learning_chat_room_video_post_path(video_post.e_learning_chat_room_id, video_post), class: "flex items-center justify-start gap-2 px-2 py-1 flex-row video-search-results cursor-pointer", style: "text-decoration: none;" do %>
+                <%= video_tag(video_post.video_file, controls: false, preload: false, muted:true, class:"w-8 h-8 rounded-md") %>
+                <p class="text-md font-medium"><%= video_post.title %></p>
             <% end %>
           <% end %>
-      </div>
-    <% end %>
+        </div>
+      <% end %>
 
-    <% if @communities %>
-      <div class="w-full h-fit flex flex-col">
-        <% if @communities.count > 0 %>
-          <p class="bg-slate-500 rounded-md px-2 py-1 text-left text-2xl font-medium">Communities</p>
-        <% end %>
-        <% @communities.each do |community| %>
-          <div class="px-2 py-1 flex flex-row items-center gap-2 video-search-results cursor-pointer">
-            <%= image_tag(community.community_profile) %>
-            <p class="text-md font-semibold"><%= community.name %></p>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-    <% if !@video_posts && !@users && !@communities %>
-      <div class="w-full flex items-center justify-center">
-        <p class="text-xl font-semibold">No results found...</p>
-      </div>
-    <% end %>
-  </div>
-</turbo-frame>
+      <% if @users %>
+        <div class="w-full h-fit flex flex-col gap-2">
+            <% if @users.count > 0 %>
+              <p class="bg-slate-500 rounded-md px-2 py-1 text-left text-2xl font-medium">Users</p>
+            <% end %>
+            <% @users.each do |user| %>
+              <%= link_to user, class: "block px-2 py-1 flex flex-row gap-2 items-center justify-start video-search-results cursor-pointer" do %>
+                <% if user.profile_image.attached?%>
+                  <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
+                <% else %>
+                  <% result = user.name.split.map(&:first).join.upcase %>
+                  <% profile_bg_color = ["blue-300", "stone-400", "amber-300", "sky-500", "orange-500" ].shuffle.first  %>
+                  <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                      <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                  </div>
+                <% end %>
+                <p class="text-md font-medium"><%= user.name %></p>
+              <% end %>
+            <% end %>
+        </div>
+      <% end %>
+
+      <% if @communities %>
+        <div class="w-full h-fit flex flex-col">
+          <% if @communities.count > 0 %>
+            <p class="bg-slate-500 rounded-md px-2 py-1 text-left text-2xl font-medium">Communities</p>
+          <% end %>
+          <% @communities.each do |community| %>
+            <div class="px-2 py-1 flex flex-row items-center gap-2 video-search-results cursor-pointer">
+              <%= image_tag(community.community_profile) %>
+              <p class="text-md font-semibold"><%= community.name %></p>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% if !@video_posts && !@users && !@communities %>
+        <div class="w-full flex items-center justify-center">
+          <p class="text-xl font-semibold">No results found...</p>
+        </div>
+      <% end %>
+    </div>
+
+  </turbo-frame>
 
 <turbo-frame id="search_results_for_explore_page">
   <div class="w-full flex flex-col items-center justify-start gap-5">
@@ -206,4 +211,6 @@
             commentsShowBtn.textContent = "Show comments";
         }
     })
+
+
 </script>

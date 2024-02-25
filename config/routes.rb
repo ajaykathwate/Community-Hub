@@ -52,6 +52,14 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :video_calls
+
+  get 'strat_video_call', to: "video_calls#strat_video_call", as: "strat_video_call"
+
+  get 'end_video_call', to: "video_calls#end_video_call", as: "end_video_call"
+
+  get 'join_video_call', to: "video_calls#join_video_call", as: "join_video_call"
+
   # resources :interests
   get 'users/:id/user_interests', to: 'users#user_interests', as: 'user_interests'
 

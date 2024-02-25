@@ -3,7 +3,7 @@
     <div>
         <% if message.user.profile_image.attached?%>
             <%= link_to message.user, class: "block" do %>
-                <%= image_tag(message.user.profile_image, class: "w-8 h-8 rounded-full") %>
+                <img src="<%= url_for(message.user.profile_image) %>" alt="" class="w-8 h-8 rounded-full">
             <% end %>
         <% else %>
             <%= link_to message.user, class: "block" do %>
@@ -25,8 +25,8 @@
             <!-- image preview if image available -->
             <% if message.post_image.attached? %>
                 <div class="flex flex-row justify-between items-center gap-2">
-                    <div class="bg-[#fff] w- rounded-xl py-1 px-1 flex-col flex gap-1               justify-between"> 
-                        <%= image_tag(message.post_image, class: "w-72 h-48 bg-cover rounded-xl cursor-pointer") %>
+                    <div class="bg-[#fff] w- rounded-xl py-1 px-1 flex-col flex gap-1               justify-between">
+                        <img src="<%= url_for(message.post_image) %>" alt="Message-Image" class="w-72 h-48 bg-cover rounded-xl cursor-pointer">
                     </div>
                     <!-- if the current user lies then count will come in bold and blue in color-->
                     <!-- likes partial rendering -->

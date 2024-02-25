@@ -13,6 +13,8 @@ class Community < ApplicationRecord
   has_many :community_users, dependent: :destroy
   has_many :users, through: :community_users
 
+  has_one :video_call, dependent: :destroy
+
   has_many :join_requests, dependent: :destroy
   has_many :requested_users, through: :join_requests, source: :user, dependent: :destroy
 

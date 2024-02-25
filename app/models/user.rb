@@ -25,6 +25,8 @@ class User < ApplicationRecord
 
   has_many :messages, dependent: :destroy
 
+  has_one :video_call, class_name: "VideoCall", dependent: :destroy
+
   has_many :video_posts, dependent: :destroy
 
   has_many :comments, dependent: :destroy

@@ -6,7 +6,28 @@
     <!-- TODO: Chatroom section and messaging functionality -->
   
     <!-- Community header which displays community profile, name, toggle between communities and delete or leave community buttons -->
-    <div class=" flex flex-row items-center justify-start gap-3 mx-2 mb-2" >
+    <div class="relative flex flex-row items-center justify-center gap-3 mx-2 mb-2" >
+
+        <div class=" hidden video-call-tab left-0 rounded-md p-4 flex gap-5 flex-col items-center justify-start">
+            <div class="w-full flex flex-row items-center justify-between ">
+                <p class="w-full flex-1 h-fit rounded-md text-xl font-mono font-medium text-center">Community: <%= @single_community.name %></p>
+            </div>
+            <!-- If the VideoCall is present and started by the current user then render this partial else display the Join Call or Start Video Call buttons on conditions -->
+            <% if @single_community.video_call && @single_community.video_call.user_id == current_user.id  %>
+                <%= render 'layouts/video_call_tab', video_call: @single_community.video_call, user: User.find(@single_community.video_call.started_by_user) %>
+            <% else %>
+                <% if @single_community.video_call %>
+                    <div id="video-call-tab">
+                        <%= link_to 'Join Call', join_video_call_path(community_id: @single_community.id, user_id: current_user.id, video_call_id: @single_community.video_call.id), class:"px-4 py-2 rounded-md bg-white"%>
+                    </div>
+                <% else %>
+                    <div id="video-call-tab">
+                        <%= link_to 'Start Video Call', strat_video_call_path(communiy_id: @single_community.id, started_by_user: current_user.id), class:"px-4 py-2 rounded-md bg-white"%>
+                    </div>
+                <% end %>
+            <% end %>
+        </div>
+
         <div id="btn_community_show" aria-describedby="tooltip_community">
             <%= image_tag(community.community_profile, class: " w-12 h-12 rounded-full cursor-pointer transform hover:scale-125 transition duration-200 ease-in-out") %>
         </div>
@@ -50,6 +71,21 @@
                 </div>
             </div>
         </div>
+
+        <!-- Video call button -->
+        <div class="px-2 rounded-xl py-1 border-slate-800 border flex flex-row items-center justify-center gap-2">
+            <button id="btn-start-video">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 cursor-pointer transform hover:scale-105 transition duration-200 ease-in-out">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
+                </svg>
+            </button>
+            <button id="btn-open-video-tab">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 cursor-pointer transform hover:scale-105 transition duration-200 ease-in-out">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+            </button>
+        </div>
+
         <!-- toggle between communities buttons -->
         <% if @single_community.topic == "E-Learning" || @single_community.topic == "Sports"%>
             <div class="flex flex-row rounded-full bg-blue-200 gap-2 px-2 py-1">
@@ -62,6 +98,20 @@
                     <button id="btn-chatRoom" class="text-sm font-medium py-1 text-white cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out bg-orange-500 px-2 rounded-full">Chatroom</button>
             </div>
         <% end %>
+
+        <!-- share button -->
+        <div
+            id="<%= dom_id @single_community %>" 
+            data-controller="share"
+            data-share-url-value="<%= share_community_url(@single_community.id, current_user) %>"
+            class="flex items-center justify-center p-1">
+            <%= button_to "", data: { action: "click->share#share" } do %>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                </svg>
+            <% end %>
+        </div>
+
         <!-- DELETE community buttons -->
         <div class="px-1">
             <% if @community_admin.id != current_user.id %>
@@ -77,19 +127,6 @@
                     </svg>
                 <% end %>
             <% end %>
-        </div>
-
-        <!-- share button -->
-        <div
-            id="<%= dom_id @single_community %>" 
-            data-controller="share"
-            data-share-url-value="<%= share_community_url(@single_community.id, current_user) %>"
-            class="flex items-center justify-center p-1">
-                <%= button_to "", data: { action: "click->share#share" } do %>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-                    </svg>
-                <% end %>
         </div>
     </div>
 

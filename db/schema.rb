@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_21_072633) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_23_051021) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -152,6 +152,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_072633) do
     t.index ["recipient_type", "recipient_id"], name: "index_noticed_notifications_on_recipient"
   end
 
+  create_table "participants", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "video_call_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_participants_on_user_id"
+    t.index ["video_call_id"], name: "index_participants_on_video_call_id"
+  end
+
   create_table "sports_chat_rooms", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "community_id"
     t.datetime "created_at", null: false
@@ -194,6 +203,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_072633) do
     t.index ["admin_id"], name: "index_users_on_admin_id"
   end
 
+  create_table "video_calls", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "community_id", null: false
+    t.integer "started_by_user"
+    t.string "iframe_link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["community_id"], name: "index_video_calls_on_community_id"
+    t.index ["user_id"], name: "index_video_calls_on_user_id"
+  end
+
   create_table "video_posts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "e_learning_chat_room_id", null: false
@@ -214,11 +234,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_072633) do
   add_foreign_key "join_requests", "communities"
   add_foreign_key "join_requests", "users"
   add_foreign_key "likes", "users"
+  add_foreign_key "participants", "users"
+  add_foreign_key "participants", "video_calls"
   add_foreign_key "taggables", "tags"
   add_foreign_key "taggables", "video_posts"
   add_foreign_key "user_interests", "interests"
   add_foreign_key "user_interests", "users"
   add_foreign_key "users", "communities", column: "admin_id"
+  add_foreign_key "video_calls", "communities"
+  add_foreign_key "video_calls", "users"
   add_foreign_key "video_posts", "e_learning_chat_rooms"
   add_foreign_key "video_posts", "users"
 end

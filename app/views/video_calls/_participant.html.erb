@@ -1,0 +1,12 @@
+<div id="video-call-participant" class="flex flex-row items-center justify-start gap-2 px-2 py-1 ">
+    <% @participant_user = User.find(participant.user_id)%>
+    <% if @participant_user.profile_image.attached?%>
+        <%= image_tag(@participant_user.profile_image, class: "w-6 h-6 rounded-full") %>
+    <% else %>
+        <% result = @participant_user.name.split.map(&:first).join.upcase %>
+        <div class="w-6 h-6 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+            <p class="text-gray-700 text-xs font-bold font-serif"><%= result %> </p>
+        </div>
+    <% end %>
+    <p class="text-sm "><%= @participant_user.name %></p>
+</div>
