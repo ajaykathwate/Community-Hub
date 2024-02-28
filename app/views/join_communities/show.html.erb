@@ -1,19 +1,38 @@
 <div class="w-screen h-screen flex flex-col items-center justify-center gap-3 bg-orange-100">
-    <p class="text-xl font-semibold font-mono">Hey, <%= current_user.name %> </p>
-    <p class="text-md font-medium"> <span class="font-semibold"><%= @user.name%></span> has invited you to join <span class="font-semibold"><%= @community.name %></span> community!</p>
+    <div class="flex flex-row items-center justify-center gap-2">
+        <p class="text-xl font-semibold font-mono">Hey, <%= current_user.name %></p>
+        <iframe src="https://lottie.host/embed/df0a6b21-7e8a-49be-9784-e2f1b58751fc/3zNsnSITYt.json" class="w-12 h-12"></iframe>
+    </div>
+
+    <div class="flex flex-col items-center justify-center gap-2 bg-white rounded-md p-4 shadow-sm">
+        <%= image_tag(@community.community_profile, class:"w-48 h-48") %>
+        <p class="text-xl font-medium font-mono"><%= @community.name  %><span class="text-sm">
+            <% if @community.isPrivate %>
+                (Private)
+            <% else %>
+                (Public)
+            <% end %>
+        </span> </p>
+        <p class="text-md font-medium font-mono"><%= @community.about  %></p>
+        <p class="text-md font-medium font-mono">Created by <span class="font-semibold"> <%= User.find(@community.admin_id).name %> </span> on <span class="font-semibold"> <%= @community.created_at.in_time_zone("Mumbai").strftime("%d %B, %Y") %></span> </p>
+    </div>
+
     <!-- if a user has a part of the community then get started else join option is present -->
     <% if !@joined %>
+        <p class="text-md font-medium font-mono"> <span class="font-semibold"><%= @user.name%></span> has invited you to join this community!</p>
         <% if @community.isPrivate %>
             <button id="requested-community" class="">
-                <%= link_to 'Request', request_to_join_community_path(@community),data: { controller: "dialog", action: "dialog#close" }, method: :get, class:"bg-orange-500 rounded-md px-5 py-1 w-fit h-fit text-white"%>
+                <%= link_to 'Request to Join ->', request_to_join_community_path(@community),data: { controller: "dialog", action: "dialog#close" }, method: :get, class:"px-4 py-2 rounded-md bg-blue-200 text-md font-semibold font-mono"%>
             </button>
             <p id="request-sent-txt" class="hidden text-md font-medium px-2 py-1 rounded-md bg-orange-500 text-white">Request Sent</p>
         <% else %>
-            <%= link_to 'Join', join_community_path(@community),data: { controller: "dialog", action: "dialog#close" }, method: :get, class:"bg-orange-500 rounded-md px-5 py-1 w-fit h-fit text-white" %>
+            <%= link_to 'Join ->', join_community_path(@community),data: { controller: "dialog", action: "dialog#close" }, method: :get, class:"px-4 py-2 rounded-md bg-blue-200 text-md font-semibold font-mono" %>
         <% end %>
     <% else %>
-        <p><b>You are already part of this community.</b></p>
-        <%= link_to 'Get Started', community_path(@community) %>
+        <div class="flex flex-col items-center justify-center gap-3">
+            <p class="text-xl font-medium font-mono">You are already part of this community</p>
+            <%= link_to 'Get Started ->', community_path(@community), class:"px-4 py-2 rounded-md bg-blue-200 text-md font-semibold font-mono" %>
+        </div>
     <% end %>
 </div>
 

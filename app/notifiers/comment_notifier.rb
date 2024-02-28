@@ -28,10 +28,6 @@ class CommentNotifier < ApplicationNotifier
     params[:message]
   end
 
-  def name
-
-  end
-
   def creator
     comment.user
   end

@@ -8,7 +8,7 @@
     <!-- Community header which displays community profile, name, toggle between communities and delete or leave community buttons -->
     <div class="relative flex flex-row items-center justify-center gap-3 mx-2 mb-2" >
 
-        <div class=" hidden video-call-tab left-0 rounded-md p-4 flex gap-5 flex-col items-center justify-start">
+        <div id="video-tab" class="hidden video-call-tab left-0 rounded-md p-4 flex gap-5 flex-col items-center justify-start">
             <div class="w-full flex flex-row items-center justify-between ">
                 <p class="w-full flex-1 h-fit rounded-md text-xl font-mono font-medium text-center">Community: <%= @single_community.name %></p>
             </div>
@@ -305,6 +305,7 @@
     const eLearningDiv = document.getElementById("eLearning-div")
     const sportsDiv = document.getElementById("sports-div")
     const newVideoFormDiv = document.getElementById("div-new-video-form")
+    const videoTabDiv = document.getElementById("video-tab")
 
 
     const eLearningButton = document.getElementById("btn-eLearning")
@@ -334,10 +335,6 @@
         }
     })
 
-    
-    
-    
-
     const sportsButton = document.getElementById("btn-sports")
     sportsButton.addEventListener("click",()=>{
         console.log("sports button clicked....")
@@ -345,4 +342,14 @@
         sportsDiv.classList.remove("hidden")
     })
 
+    const openVideoTabButton = document.getElementById("btn-open-video-tab")
+    openVideoTabButton.addEventListener("click",()=>{
+        console.log("video btn clicked....")
+        if(videoTabDiv.classList.contains('hidden')){
+            videoTabDiv.classList.remove("hidden")
+        }else{
+            videoTabDiv.classList.add("hidden")
+        }
+    })
+    
 </script>

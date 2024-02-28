@@ -53,7 +53,7 @@ class JoinCommunitiesController < ApplicationController
           locals: { user: @community_admin, unread: true }
       end
     end
-    redirect_to @community
+    redirect_to app_path
   end
 
   # accept the join community request
@@ -61,6 +61,7 @@ class JoinCommunitiesController < ApplicationController
     # fetch the join comunity request and find @community and @request_user from it.
     @accept_join_request = JoinRequest.find(params[:id])
     @community = Community.find(@accept_join_request.community_id)
+    @community_admin = User.find(@community.admin_id)
     @requested_user = User.find(@accept_join_request.user_id)
 
     # if both the value are present then only add the user to the community.
@@ -132,6 +133,7 @@ class JoinCommunitiesController < ApplicationController
   # check if the user is authenticated
   def authenticate_user
     if !current_user
+      session[:fall_back_url] = request.url
       redirect_to new_user_sessions_path
     end
   end

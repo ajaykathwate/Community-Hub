@@ -1,7 +1,7 @@
 
 <%= form_with model: @user, url: users_path do |form|%>
     
-    <section class="bg-orange-100 w-screen h-screen px-8 flex flex-row gap-y-5 justify-center items-center">
+    <section class="bg-orange-100 w-screen h-screen px-8 flex flex-row gap-5 justify-center items-center">
         <!-- validation errors here -->
     <% if @user.errors.any? %>
         <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
@@ -14,16 +14,12 @@
         </div>
     <% end %>
         <div class="flex items-center justify-center">
-            <nav class="container flex flex-row w-fit h-fit bg-orange-50 border-none rounded-lg shadow-md items-center justify-between transform -rotate-90">
-              <%= link_to root_path, class: "block" do %>
-                <div class="p-3 items-center flex text-2xl text-orange-950 font-mono">
-                  Community Hub
-                </div>
-              <% end %>
+            <nav class="flex flex-row w-fit h-fit items-center justify-between">
+              <iframe src="https://lottie.host/embed/2012e4bd-391d-4cb0-8c5b-737caa236c00/FRTTqHxP9z.json" style="width: 30em; height: 30em;"></iframe>
             </nav>
         </div>
 
-        <div class="flex flex-1 items-center justify-center">
+        <div class="flex items-center justify-center">
 
             <div class=" bg-white w-fit h-fit border-none rounded-md p-8  gap-5 flex flex-col justify-center">  
 
@@ -68,7 +64,7 @@
                 <div class="relative">
                     <p class="text-sm">
                         Already have an account? 
-                        <span class="italic text-orange-700 hover:underline cursor-pointer">
+                        <span style="color: blue;" class="italic hover:underline cursor-pointer">
                             <%= link_to 'Login', new_user_sessions_path %>
                         </span>
                     </p>
