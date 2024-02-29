@@ -11,7 +11,7 @@ class SearchesController < ApplicationController
       # users
       @users = User.containing(params[:query])
       # communities
-      @Communities = Community.containing(params[:query])
+      @communities_all = Community.containing(params[:query])
       # messages
       @messages = Message.includes(:post_image_attachment).where.not(post_image_attachment: { id: nil }).containing(params[:query])
       # tags

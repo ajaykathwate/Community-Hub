@@ -1,8 +1,10 @@
-<% if @single_community %>
+<% if @single_community %> 
     <% if @single_community.id == community.id%>
         <div class="rounded-md border-x-4 border-green-500 relative" >
             <div id="community_btn" aria-describedby="icon_tooltip">
-                <%= link_to(image_tag(community.community_profile, alt: community.name, class:"bg-cover  w-12 h-12 rounded-lg cursor-pointer"), community) %>
+                <%= link_to community do %>
+                    <img src="<%= url_for(community.community_profile) %>" alt="Community_profile" class="bg-cover w-12 h-12 rounded-lg cursor-pointer">
+                <% end %>
             </div>
             <!-- tooltip -->
             <div class="min-w-fit max-h-[30em] overflow-y-auto hide-scrollbar flex-row items-center justify-center cursor-default  text-sm bg-slate-800 text-white p-2 gap-2 rounded-md hidden absolute left-14 top-0" style="white-space: nowrap;" id="icon_tooltip" role="icon_tooltip">
@@ -12,7 +14,9 @@
         </div>
     <% else %>
         <div id="btn" aria-describedby="tooltip">
-            <%= link_to(image_tag(community.community_profile, alt: community.name, class:"bg-cover  w-12 h-12   border-none rounded-lg cursor-pointer"), community) %>
+            <%= link_to community do %>
+                <img src="<%= url_for(community.community_profile) %>" alt="Community_profile" class="bg-cover w-12 h-12 rounded-lg cursor-pointer">
+            <% end %>
             <div class="min-w-full max-w-48 max-h-fit flex-row items-center justify-center text-sm bg-slate-800 text-white px-4 py-1 rounded-md hidden absolute left-14" style="white-space: nowrap;" id="tooltip" role="tooltip">
                 <!-- content passed from data-tooltip-text will appear here -->
                 <p><%= community.name %></p>
@@ -21,7 +25,9 @@
     <% end %>
 <% else %>
     <div id="btn" aria-describedby="tooltip">
-        <%= link_to(image_tag(community.community_profile, alt: community.name, class:"bg-fit  w-12 h-12   border-none rounded-lg cursor-pointer"), community) %>
+        <%= link_to community do %>
+            <img src="<%= url_for(community.community_profile) %>" alt="Community_profile" class="bg-cover w-12 h-12 rounded-lg cursor-pointer">
+        <% end %>
         <div class="min-w-full max-w-48 max-h-fit flex-row items-center justify-center text-sm bg-slate-800 text-white px-4 py-1 rounded-md hidden absolute left-14" style="white-space: nowrap;" id="tooltip" role="tooltip">
             <!-- content passed from data-tooltip-text will appear here -->
             <p><%= community.name %></p>

@@ -25,10 +25,18 @@ class MessagesController < ApplicationController
     #   # html = render(partial: 'messages/message', locals: { message: @message })
     #   # ActionCable.server.broadcast("room_channel_#{@message.chat_room_id}", {html: html})
     #   # SendMessageJob.perform_later(@message)
-      html = ApplicationController.render(
-        partial: "messages/message",
-        locals:{message: @message}
-      )
+
+      if current_user.id == @message.user.id
+        html = ApplicationController.render(
+          partial: "messages/message_sent_by_current_user",
+          locals:{message: @message}
+        )
+      else
+        html = ApplicationController.render(
+          partial: "messages/message",
+          locals:{message: @message}
+        )
+      end
       ActionCable.server.broadcast("room_channel_#{@message.chat_room_id}", {html: html} )
     # turbo_stream.append :messages, partial: 'messages/message', locals: { message: @message }
   end

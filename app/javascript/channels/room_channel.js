@@ -7,6 +7,8 @@ consumer.subscriptions.create({channel: "RoomChannel", chat_room_id: chat_room_i
   connected() {
 
     console.log("Connected to ActionCable..." + chat_room_id);
+    const msgContainer = document.getElementById('messages')
+    msgContainer.lastElementChild.scrollIntoView({behavior: "smooth"})
     // Called when the subscription is ready for use on the server
   },
 

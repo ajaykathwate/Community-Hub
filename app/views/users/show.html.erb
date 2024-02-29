@@ -5,106 +5,131 @@
 <!-- User's overview page -->
 <% user = User.find(params[:id])%>
 
-<%= link_to 'Go Back', :back, class:"mx-2 my-2 w-20 h-fit items-center flex justtify-center text-center border-gray-500 border-2 px-2 py-1 text-sm font-light rounded-full" %>
 
-<div class="w-screen max-h-screen flex items-center justify-center">
-    <div class="w-fit h-fit max-h-screen p-5 rounded-md flex flex-col shadow-md items-center justify-center gap-5 rounded-mf bg-blue-300 overflow-y-auto custom-scrollbar">
-        <p class="w-fit p-2 flex items-center justify-center bg-orange-50 shadow-sm rounded-md text-lg font-semibold">User Details</p>
-        <div class="w-fit h-fit flex flex-row bg-orange-100 items-center justify-center gap-5 rounded-md shadow-md">
-            <div class="w-full flex flex-row items-center justify-center gap-2 p-2">
-                <% if user.profile_image.attached?%>
-                  <%= image_tag(user.profile_image, class: "w-20 h-20 rounded-full") %>
-                <% else %>
-                  <% result = user.name.split.map(&:first).join.upcase %>
-                  <div class="w-20 h-20 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center">
-                      <p class="text-gray-700 text-3xl font-bold font-serif"><%= result %> </p>
-                  </div>
-                <% end %>
-                <table class="min-w-full divide-y divide-gray-200 gap-2 rounded-md">
-                    <tbody class="divide-y divide-gray-200 rounded-md">
-                        <tr class="rounded-md hover:bg-orange-50">
-                            <td class="px-4 text-md font-medium text-black py-2 whitespace-nowrap">Name</td>
-                            <td class="px-4 text-md font-normal text-black py-2 whitespace-nowrap"><%= user.name%></td>
-                        </tr>
-                        <tr class="rounded-md hover:bg-orange-50 ">
-                            <td class="px-4 text-md font-medium text-black py-2 whitespace-nowrap">Username</td>
-                            <td class="px-4 text-md font-normal text-black py-2 whitespace-nowrap"><%= user.username%></td>
-                        </tr>
-                        <tr class="rounded-md hover:bg-orange-50 ">
-                            <td class="px-4 text-md font-medium text-black py-2 whitespace-nowrap">Email</td>
-                            <td class="px-4 text-md font-normal text-black py-2 whitespace-nowrap"><%= user.email %></td>
-                        </tr>
-                        <% if user.about %>
-                            <tr class="rounded-md hover:bg-orange-50 ">
-                                <td class="px-4 text-md font-medium text-black py-2 whitespace-nowrap">About</td>
-                                <td class="px-4 text-md font-normal text-black py-2 whitespace-nowrap"><%= user.about.length == 0?"No about present..." : user.about %></td>
-                            </tr>
+
+<div class="user-profile-page w-screen max-w-screen h-full max-h-screen rounded-lg">
+
+    <div class="h-full w-full user-left-div fex-1 p-4 gap-3">
+        <div class=" user-info-div p-2 rounded-md items-center  overflow-y-auto hide-scrollbar">
+            <% if user.profile_image.attached? %>
+                <%= image_tag(user.profile_image, class:"user-profile rounded-full") %>
+            <% else %>
+                <iframe src="https://lottie.host/embed/878d68ac-c13b-4752-9e8b-90709c756333/UVaMxSLjio.json" class="user-profile rounded-full"></iframe>
+            <% end %>
+            <div class="w-full h-auto flex flex-col justify-between p-2 gap-1">
+                <p class="text-lg font-semibold text-black">User Details</p>
+                <div className="flex items-center justify-between py-2 flex-row">
+                    <p class="text-md font-medium text-gray-800">Name:</p>
+                    <p class="text-md font-normal text-gray-800 text-wrap"><%= user.name %></p>
+                </div>
+                <hr className="my-1" />
+                <div className="flex items-center justify-between py-2 flex-row">
+                    <p class="text-md font-medium text-gray-800">Username: </p>
+                    <p class="text-md font-normal text-gray-800 text-wrap"><%= user.username %></p>
+                </div>
+                <hr className="my-1" />
+                <div className="flex items-center justify-between py-2 flex-row">
+                    <p class="text-md font-medium text-gray-800">Email: </p>
+                    <p class="text-md font-normal text-gray-800 text-wrap"><%= user.email %></p>
+                </div>
+                <hr className="my-1" />
+                <div className="flex items-center justify-between py-2 flex-row">
+                    <p class="text-md font-medium text-gray-800">About: </p>
+                    <% if user.about %> 
+                        <p class="text-md font-normal text-gray-800 text-wrap">No about!</p>
+                    <% else %>
+                        <p class="text-md font-normal text-gray-800 text-wrap"><%= user.about %></p>
+                    <% end %>
+                </div>
+                <hr className="my-1" />
+                <div className="flex items-center justify-between py-2 flex-row">
+                    <p class="text-md font-medium text-gray-800">MEMBER SINCE</p>
+                    <p class="text-md font-normal text-gray-800 text-wrap"><%= current_user.created_at.in_time_zone("Mumbai").strftime("%d %B, %Y") %></p>
+                </div>
+                <hr className="my-1" />
+                <div className="flex items-center justify-between py-2 flex-row gap-1">
+                    <p class="text-md font-medium text-gray-800">Interests</p>
+                    <div class="flex flex-row flex-wrap gap-2">
+                        <% user.interests.each do |interest|%>
+                            <p class="px-2 py-1 rounded-md text-sm font-mono font-medium" style="background-color: lightblue;"><%= interest.name %></p>
                         <% end %>
-                    </tbody>
-                </table>
+                    </div>
+                    <p class="text-md font-normal text-gray-800 text-wrap"><%= current_user.created_at.in_time_zone("Mumbai").strftime("%d %B, %Y") %></p>
+                </div>
+                <hr className="my-1" />
+                
+                <div class="w-full flex flex-1 flex-col items-center justify-center gap-2">
+                    <%= link_to 'Edit Interests', user_interests_path(id: current_user.id), class:"w-full text-sm text-center font-semibold bg-gray-300 text-gray-600 px-2 py-1 rounded-md hover:text-md" %>
+                    <%= link_to 'Edit Profile', edit_user_path(current_user), data: {turbo_frame: :modal, action: "click -> dialog#open"}, class:"w-full text-sm text-center font-semibold bg-gray-300 text-gray-600 px-2 py-1 rounded-md hover:text-md" %>
+                    <%= link_to 'Logout', logout_path, data: { confirm: 'Are you sure?', turbo_method: :delete }, class:"w-full text-sm font-semibold bg-orange-500 text-center px-2 py-1 rounded-md" %>
+                </div>
             </div>
         </div>
-        <div class="flex flex-row items-start justify-center rounded-md bg-orange-50 gap-5">
-            <!-- communities created by this user -->
-            <% if user.communities.count > 0 %>
-                <div class=" p-2 rounded-md max-h-20 overflow-y-auto custom-scrollbar">
-                    <p class="w-full text-md text-center p-2 font-semibold ">Communities by me</p>
-                    <% if user.communities.count > 0 %>
+        
+        <div class="flex flex-col w-full gap-2">
+
+            <div class="community-post-div flex flex-col w-full  bg-white rounded-md p-2">
+                <p class="w-full text-lg font-semibold p-2">Communities by <%= user.name %></p>
+                <hr className="my-1 px-1" />
+                <% if user.communities.count > 0 %>
+                    <div class="w-full h-fit flex-col">
                         <% user.communities.each do |community|%>
-                            <% if community.admin_id == user.id %>
-                                <div class="w-full h-fit flex flex-row items-center justify-between gap-2 px-8 py-1">
-                                    <%= image_tag(community.community_profile, class:"w-8 h-8 rounded-full ") %>
-                                    <p class="flex flex-1 text-left text-sm font-medium"><%= community.name[0,30]%></p>
-                                    <%= link_to community, class: "block" do %>
-                                        <div class="w-5 h-5 rounded-full">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5                 6L21 3m0 0h-5.25M21 3v5.25" />
-                                            </svg>
-                                        </div>
+                            <% if community.admin_id == current_user.id %>
+                                <div class="flex w-full flex-row items-center justify-start gap-2 p-2 community-link rounded-md">
+                                    <%= image_tag(community.community_profile, class:"w-8 h-8 rounded-full cursor-pointer") %>
+                                    <%= link_to community do %>
+                                        <p class="text-md font-medium"><%= community.name %></p>
                                     <% end %>
                                 </div>
                             <% end %>
-                        <% end %>  
-                    <% end %>
-                </div>
-            <% end %>
-
-            <!-- likes or comments -->
-            <div class="  p-2 rounded-md max-h-20 overflow-y-auto custom-scrollbar flex flex-col items-center justify-start">
-                <p class="w-full text-md text-center p-2 font-semibold ">Interacted Posts</p>
-                <% count = 0 %>
-                <% VideoPost.all.each do |post| %>
-                    <% post.likes.each do |like|%>
-                        <% if like.user_id == user.id %>
-                            <% count = count + 1%>
-                            <div class="w-full h-fit flex flex-row items-center justify-start gap-2 px-8 py-1">
-                                <%= video_tag(post.video_file, controls: false, preload: false, muted:true, class:"w-8 h-8 rounded-md") %>
-                                <p class="text-sm font-medium"><%= post.title %></p>
-                            </div>
                         <% end %>
-                    <% end %>
-                <% end %>
-                <% if count == 0 %>
-                    <p class="text-md text-center font-normal">No interacted posts</p>
+                    </div>
                 <% end %>
             </div>
-            <!-- posts created by ths user -->
-            <div class=" p-2 rounded-md max-h-24 overflow-y-auto custom-scrollbar">
-                <p class="w-full text-md text-center p-2 font-semibold ">Posts</p>
+
+            <div class="community-post-div flex flex-col w-full bg-white rounded-md p-2">
+                <p class="w-full text-lg font-semibold p-2">Interacted Posts</p>
+                <% count = 0 %>
+                <div class="flex flex-col w-full h-fit max-h-[33.5em]">
+                    <% VideoPost.all.each do |post| %>
+                        <% post.likes.each do |like|%>
+                            <% if like.user_id == user.id %>
+                                <% count = count + 1%>
+                                <div class="w-full h-fit flex flex-row items-center justify-start gap-2 p-2 post-link rounded-md cursor-pointer">
+                                    <%= video_tag(post.video_file, controls: false, preload: false, muted:true, class:"w-8 h-8 rounded-md") %>
+                                    <%= link_to e_learning_chat_room_video_post_path(post.e_learning_chat_room_id, post) do %> 
+                                        <p class="text-sm font-medium"><%= post.title %></p>
+                                    <% end %>
+                                </div>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                    <% if count == 0 %>
+                        <p class="text-md text-center font-normal">No interacted posts</p>
+                    <% end %>
+                </div>
+            </div>
+        
+        </div>
+
+        <div class="w-full h-full flex flex-col gap-2 p-2 rounded-md bg-white">
+            <p class="w-full text-lg font-semibold p-2">Posts by <%= user.name %></p>
+            <hr className="my-1 px-1" />
+            <div class="w-full h-full max-h-[33.5em] overflow-y-auto custom-scrollbar">            
                 <% count_posts_created = 0 %>
                 <% VideoPost.all.each do |post|%>
                     <% if post.user_id == user.id %>
                         <% count_posts_created = count_posts_created + 1%>
-                        <div class=" flex flex-row items-center justify-start gap-2 px-2 py-1">
+                        <div class=" flex flex-row items-center justify-start gap-2 p-2 rounded-md cursor-pointer post-link">
                             <%= link_to e_learning_chat_room_video_post_path(post.e_learning_chat_room_id, post), class: "flex items-center justify-start gap-2", style: "text-decoration: none;" do %>
                                 <% user = User.find(post.user_id) %>
                                 <% if user.profile_image.attached?%>
-                                  <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
+                                <%= image_tag(user.profile_image, class: "w-8 h-8 rounded-full") %>
                                 <% else %>
-                                  <% result = user.name.split.map(&:first).join.upcase %>
-                                  <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
-                                      <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
-                                  </div>
+                                <% result = user.name.split.map(&:first).join.upcase %>
+                                <div class="w-8 h-8 bg-amber-400 border-none rounded-full cursor-pointer flex items-center justify-center" id="btn" aria-describedby="tooltip" >
+                                    <p class="text-gray-700 text-sm font-bold font-serif"><%= result %> </p>
+                                </div>
                                 <% end %>
                                 <p><%= post.title %></p>
                             <% end %>
@@ -116,5 +141,6 @@
                 <% end %>
             </div>
         </div>
+
     </div>
 </div>

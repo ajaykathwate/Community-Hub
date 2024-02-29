@@ -1,6 +1,5 @@
   <turbo-frame id="search_results" class="">
 
-
     <div class=" search-results-div overflow-y-auto custom-scrollbar bg-white rounded-md flex flex-col items-center justify-center">
 
       <% if @video_posts %>
@@ -38,17 +37,19 @@
             <% end %>
         </div>
       <% end %>
-
-      <% if @communities %>
-        <div class="w-full h-fit flex flex-col">
-          <% if @communities.count > 0 %>
+      
+      <% if @communities_all %>
+        <div class="w-full h-fit flex flex-col gap-2">
+          <% if @communities_all.count > 0 %>
             <p class="bg-slate-500 rounded-md px-2 py-1 text-left text-2xl font-medium">Communities</p>
           <% end %>
-          <% @communities.each do |community| %>
-            <div class="px-2 py-1 flex flex-row items-center gap-2 video-search-results cursor-pointer">
-              <%= image_tag(community.community_profile) %>
-              <p class="text-md font-semibold"><%= community.name %></p>
-            </div>
+          <% @communities_all.each do |community| %>
+            <%= link_to community do %>
+              <div class="px-2 py-1 flex flex-row items-center gap-2 video-search-results cursor-pointer">
+                <%= image_tag(community.community_profile, class:"w-8 h-8 rounded-full object-contain") %>
+                <p class="text-md font-semibold"><%= community.name %></p>
+              </div>
+            <% end %>
           <% end %>
         </div>
       <% end %>
@@ -196,6 +197,32 @@
   
   </div>
 
+</turbo-frame>
+
+
+<turbo-frame id="search_results_for_communities">
+  <% if @communities_all %>
+    <div class="communities-list overflow-y-auto custom-scrollbar">
+      <% @communities_all.each do |community| %>
+          <div class="w-full rounded-md flex flex-row items-center justify-between gap-5 my-2 px-2">
+              <% if community.community_profile.attached?%>
+                  <%= image_tag community.community_profile, class:"w-8 h-8 rounded-full"%>
+              <% end %>
+              <div class=" flex flex-1 flex-row items-center justify-between gap-3">
+                  <p class="text-md text-wrap font-medium text-black"> <%= community.name %> </p>
+              </div>
+              <div class="">
+                  <!-- checking if a community private, if the community is private then add Request button or add Join button -->
+                  <% if community.isPrivate %>
+                      <%= link_to 'Request', request_to_join_community_path(community),data: { controller: "dialog", action: "dialog#close" }, method: :get, class:"bg-orange-500 rounded-md px-5 py-1 w-12 h-fit text-white"%>
+                  <% else %>
+                      <%= link_to 'Join', join_community_path(community),data: { controller: "dialog", action: "dialog#close" }, method: :get, class:"bg-yellow-500 rounded-md px-5 py-1 w-12 h-fit text-white" %>
+                  <% end %>
+              </div>
+          </div>
+      <% end %>
+    </div>
+  <% end %>
 </turbo-frame>
 
 <script>

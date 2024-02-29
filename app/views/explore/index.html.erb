@@ -45,9 +45,8 @@
             
             <div id="records" style="display: none;" class="flex flex-col items-center justify-center gap-2">
                 <% @shuffled_records.each do |record| %>
-                    <% if record.is_a?(VideoPost) %>
                         <% c = Community.find(ELearningChatRoom.find(record.e_learning_chat_room_id).community_id)%>
-                        <% if !Community.find(ELearningChatRoom.find(record.e_learning_chat_room_id).community_id).isPrivate%>
+                        <% if !Community.find(ELearningChatRoom.find(record.e_learning_chat_room_id).community_id).isPrivate || (Community.find(ELearningChatRoom.find(record.e_learning_chat_room_id).community_id).isPrivate && Community.find(ELearningChatRoom.find(record.e_learning_chat_room_id).community_id).admin_id == current_user.id) %>
                             <div class="p-2 rounded-md bg-white shadow-md flex gap-2 flex-col hover:bg-blue-300">
                                 <div class="flex items-center justify-between">
                                     <%= link_to c, class: "block flex flex-row items-center gap-2" do %>
@@ -106,41 +105,10 @@
                                     </div>
                                 </div>
                             </div>
-                        <% end %>
-                    <% elsif record.is_a?(Message) %>
-                        <% c = Community.find(ChatRoom.find(record.chat_room_id).community_id)%>
-                        <% if !c.isPrivate%>
-                            <div class="p-2 rounded-md bg-white shadow-md flex gap-2 flex-col">
-                                <%= link_to c, class: "block flex flex-row items-center gap-2" do %>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                                    </svg>
-                                    <p class="text-sm font-normal py-1">From community, </p>
-                                    <p class="text-sm font-normal py-1"><%= c.name %></p>
-                                <% end %>
-                                <!-- all possible message_image info  -->
-                                <% if record.post_image.attached? %>
-                                    <%= image_tag(record.post_image, class:"w-96 h-48 bg-cover rounded-xl cursor-pointer") %>
-                                <% end %>
-                                <div class="flex flex-row items-center justify-start gap-1">
-                                    <p class="text-sm">by</p>
-                                    <%= link_to User.find(record.user_id), class: "block" do %>
-                                        <p class="text-sm  font-medium text-black">                                
-                                            <%= User.find(record.user_id).username %>,
-                                        </p>
-                                    <% end %>
-                                    <p class="text-sm  font-medium text-gray-500">
-                                        <%= time_ago_in_words(record.created_at.in_time_zone("Mumbai")) %> ago
-                                    </p>
-                                </div>
-                                <p class="text-wrap text-md"><%= record.content %></p>
-                                <%= render partial: 'messages/likes', locals:{message: record}%>
-                            </div>
-                        <% end %>
                     <% end %>
                 <% end %>
             </div>
-
+            
             <div class="h-fit p-4 gap-2 flex items-center justify-start flex-col rounded-md bg-gray-300">
                 <p class="text-center text-xl font-semibold font-mono w-full h-fit bg-white px-2 py-1 rounded-md ">Users</p>
                 <div class="flex flex-col items-center justify-start gap-2 bg-white px-2 py-2 rounded-md explore-users-interests-area overflow-y-auto hide-scrollbar">
@@ -216,6 +184,5 @@
             recordsContainer.style.display = "block";
         });
     });
-
 
 </script>

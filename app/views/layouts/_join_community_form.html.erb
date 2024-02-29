@@ -1,36 +1,28 @@
-<div class="w-fit max-w-fit flex flex-col justify-start gap-4 p-2">
+<div class="w-96 max-w-[33.5em] flex flex-col justify-start gap-4 p-2">
     <div class="flex flex-row items-center justify-between">
         <p class="flex-1 w-full text-center text-black text-xl font-semibold">Join Community</p>
         <button data-action="dialog#close" class=" cursor-pointer">
-            <img src="https://cdn-icons-png.flaticon.com/128/11823/11823292.png" class="w-6 h-6"/>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
         </button>
     </div>
 
-    <div class="w-full">
-
-
-        
-    </div>
-
-    <div class="w-fit h-fit max-w-fit max-h-[27em] flex flex-1 flex-start flex-row gap-2 flex-wrap overflow-y-auto custom-scrollbar">
-        <% if @communities.count == 0 %>
-        <div class="flex flex-col items-center justify-center">
-
-            <p class="text-center text-lg font-semibold text-[#a6a8aa]">No communities availableto join...</p> <br>
-            
-            <div class="flex flex-row items-center justify-center">
-
-            <%= link_to new_community_path, data: {turbo_frame: :modal, action: "click -> dialog#open"}, class: "block" do %>
-                <div class="w-fit h-fit mb-2 border-none bg-blue-300 rounded-full text-green-500 cursor-pointer flex justify-center items-center">
-                    <p class="text-center text-lg font-semibold text-black py-1 px-2">Create</p>
-                </div>
-            <% end %>
-            </div>
-        </div>
-        <% else %>
-            <%= render "join_communities/community_search", communities: @communities %>
+    <div class="">
+        <%= form_with(url: searches_index_path(turbo_frame: "search_results"),
+                method: "get",
+                data: { "turbo-frame": "search_results_for_communities",
+                        controller: "search",
+                        "search-target": "form" }) do |form| %>
+            <%= form.search_field :query,
+                placeholder: "Search communities here ",
+                autocomplete: "off",
+                data: { action: "input->search#search" }, 
+                class:"w-full rounded-md border-none bg-gray-300 text-black" %>
         <% end %>
-        
     </div>
+         
+    <turbo-frame id="search_results_for_communities" target="_top"></turbo-frame>
+    
 </div>
 
