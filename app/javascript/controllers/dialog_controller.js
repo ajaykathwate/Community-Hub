@@ -25,6 +25,7 @@ export default class extends Controller {
 
   close() {
     this.element.close()
+    console.log("closed...");
     // clean up modal content
    const frame = document.getElementById('modal')
     frame.removeAttribute("src")

@@ -1,4 +1,4 @@
-<%= form_with(model: [@e_learning_chat_room, @video_post], remote: true) do |form| %> 
+<%= form_with(model: [@e_learning_chat_room, @video_post], remote: true, data:{ turbo_frame: :modal, action: "turbo:submit-end->dialog#close"}) do |form| %>
 
     <%= form.hidden_field :user_id, value: current_user.id %>
 
@@ -30,7 +30,6 @@
         <div class="w-full rounded-full text-md font-medium bg-[#0775ff] py-1 justify-center items-center flex cursor-pointer">
             <%= form.submit "Submit", data: { disable_with: false }, class:"text-white cursor-pointer"%>
         </div>
-    
     </div>
 
 <% end %>

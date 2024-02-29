@@ -39,8 +39,11 @@ class VideoPostsController < ApplicationController
   def update
     @e_learning_chat_room = ELearningChatRoom.find(params[:e_learning_chat_room_id])
     @video_post = VideoPost.find(params[:id])
-    if @video_post.update(post_params)
-      redirect_to app_path, notice: "VideoPost Updated Successfully!"
+    @user = current_user
+    create_or_delete_video_posts_tags(@video_post, params[:video_post][:tags])
+    if @video_post.update(post_params.except(:tags))
+      render turbo_stream: turbo_stream.prepend(:video_posts, partial: 'video_posts/video_post', locals:{ video_post: @video_post, current_user: @user })
+      # redirect_to app_path, notice: "VideoPost Updated Successfully!"
     else
       render edit_communities_path(@community)
     end
